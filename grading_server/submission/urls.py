@@ -1,7 +1,8 @@
 from django.urls import path
 
-from . import views
+from submission import views
 
 urlpatterns = [
     path('', views.index, name='index'),
+    path('subs/', views.submissions, name='subs'),
 ]
