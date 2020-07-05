@@ -6,3 +6,7 @@ class FileSubssmion(models.Model):
     submission_time = models.DateTimeField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     graded = models.BooleanField(default = False)
+
+class SubmissionReply(models.Model):
+    submission = models.ForeignKey(FileSubssmion, on_delete = models.CASCADE)
+    correct = models.BooleanField(default = False)
