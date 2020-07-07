@@ -10,7 +10,7 @@
 <body>
     {% block topbar %}
     <div class="topbar">
-        <img src="{% static 'tmp_logo.png' %}" />
+        <a href="/"><img src="{% static 'tmp_logo.png' %}" /></a>
         {% block user %}
         <div class="user">
             {% if user.is_authenticated %}
@@ -31,9 +31,9 @@
     {% block content %}
     <!-- default content text (typically empty) -->{% endblock %}
     {% block footer %}
-    <div class="footer">
+    <footer>
         Here is some info in the footer
-    </div>
+    </footer>
     {% endblock %}
 </body>
 
