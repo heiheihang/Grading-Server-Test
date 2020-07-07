@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% block title %}<title>template</title>{% endblock %}
+    <meta charset="utf-8">
+</head>
+
+<body>
+    {% block topbar %}
+    <div class="topbar">
+        <img src="{% static 'tmp_logo.png' %}" />
+        {% block user %}
+        <div class="user">
+            {% if user.is_authenticated %}
+            <a href="profile/{{ user.get_username }}">{{ user.get_username }}</a>
+            |
+            <a href="account/logout">logout</a>
+            {% else %}
+            <a href="account/login">login</a>
+            |
+            <a href="account/register">register</a>
+            {% endif %}
+        </div>
+        {% endblock %}
+    </div>
+    {% endblock %}
+    {% block navbar %}
+    <!-- insert default navigation text for every page -->{% endblock %}
+    {% block content %}
+    <!-- default content text (typically empty) -->{% endblock %}
+    {% block footer %}
+    <div class="footer">
+        Here is some info in the footer
+    </div>
+    {% endblock %}
+</body>
+
+</html>
