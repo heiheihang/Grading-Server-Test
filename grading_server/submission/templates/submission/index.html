@@ -1,5 +1,12 @@
 {% extends 'base.html' %}
 {% block title %}<title>Submit solution</title>{% endblock %}
+{% block user %}
+<div class="user">
+    <a href="/profile/{{ user.get_username }}">{{ user.get_username }}</a>
+    |
+    <a href="/accounts/logout?next=/">logout</a>
+</div>
+{% endblock %}
 {% block content %}
 <div class="code-submission">
     <form id="submission-form" enctype="multipart/form-data" method="POST">

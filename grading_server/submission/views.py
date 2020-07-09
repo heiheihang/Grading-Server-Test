@@ -1,15 +1,14 @@
 from django.shortcuts import render
 
 # Create your views here.
-from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect
 from .models import FileSubssmion
 from .forms import FileSubssmionForm
+from django.contrib.auth.decorators import login_required
 
 
+@login_required
 def index(request):
-    if not request.user.is_authenticated:
-        raise PermissionDenied
     print(request.user)
     if request.method == 'POST':
         form = FileSubssmionForm(

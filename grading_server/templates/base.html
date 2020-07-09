@@ -14,13 +14,13 @@
         {% block user %}
         <div class="user">
             {% if user.is_authenticated %}
-            <a href="profile/{{ user.get_username }}">{{ user.get_username }}</a>
+            <a href="/profile/{{ user.get_username }}">{{ user.get_username }}</a>
             |
-            <a href="account/logout">logout</a>
+            <a href="/accounts/logout?next={{ request.path | urlencode }}">logout</a>
             {% else %}
-            <a href="account/login">login</a>
+            <a href="/accounts/login?next={{ request.path | urlencode }}">login</a>
             |
-            <a href="account/register">register</a>
+            <a href="/accounts/register">register</a>
             {% endif %}
         </div>
         {% endblock %}
