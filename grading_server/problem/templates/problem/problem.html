@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block content %}
+<script>
+    function copy(div_id) {
+        var text = document.getElementById(div_id);
+        text.select();
+        document.execCommand("copy");
+    }
+</script>
+<div class="problem-header">
+    <h1>{{ problem.name }}</h1>
+    {% if is_author %}
+    <a href="edit">Edit</a>
+    {% endif %}
+</div>
+<div class="problem-statement">
+    {{ problem.problem_statement }}
+</div>
+<div class="example">
+    {% for example in examples %}
+    <div class="example" id="{{ example.task_num }}-{{ example.sub_task_num }}">
+        <div class="input">
+            <div class="input-header">Input<button
+                    onclick="copy('{{ example.task_num }}-{{ example.sub_task_num }}-input')">Copy</button>
+            </div>
+            <div class="input-main" id="{{ example.task_num }}-{{ example.sub_task_num }}-input">{{ example.input }}
+            </div>
+        </div>
+        <div class="output">
+            <div class="output-header">Output<button
+                    onclick="copy('{{ example.task_num }}-{{ example.sub_task_num }}-output')">Copy</button>
+            </div>
+            <div class="output-main" id="{{ example.task_num }}-{{ example.sub_task_num }}-output">{{ example.output }}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<div class="submit">
+    ...
+</div>
+{% endblock %}

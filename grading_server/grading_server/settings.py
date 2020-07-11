@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'submission.apps.SubmissionConfig',
     'home.apps.HomeConfig',
     'accounts.apps.AccountsConfig',
+    'problem.apps.ProblemConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

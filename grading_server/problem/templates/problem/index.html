@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="problem-list">
+    <table class="problem-list-table">
+        <th>
+        <th>Name</th>
+        <th>Authors</th>
+        </th>
+        {% for problem in problems %}
+        <th>
+        <th><a href="{{ problem.id }}">{{ problem.name }}</a></th>
+        <th>{{ problem.authors }}</th>
+        </th>
+        {% end for %}
+    </table>
+</div>
+{% endblock %}
