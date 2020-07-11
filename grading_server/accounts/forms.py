@@ -11,7 +11,7 @@ class LoginForm(Form):
 
 
 class RegisterForm(Form):
-    username = RegexField("^[0-9A-Za-z_]$", label='username', min_length=6,
+    username = RegexField("^[0-9A-Za-z_]+$", label='username', min_length=6,
                           max_length=100, required=True, error_messages={'invalid': 'username should only contain [0-9A-Za-z_]'})
     email = EmailField(label='email')
     password = CharField(label='password', min_length=6,
