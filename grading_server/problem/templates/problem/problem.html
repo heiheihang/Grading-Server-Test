@@ -1,4 +1,6 @@
 {% extends 'base.html' %}
+{% load static %}
+<link rel="stylesheet" type="text/css" href="./ style.css">
 {% block content %}
 <script>
     function copy(div_id) {
@@ -7,6 +9,7 @@
         document.execCommand("copy");
     }
 </script>
+<h1> test </h1>
 <div class="problem-header">
     <h1>{{ problem.name }}</h1>
     {% if is_author %}
@@ -15,6 +18,22 @@
 </div>
 <div class="problem-statement">
     {{ problem.problem_statement }}
+</div>
+
+<div class="test-suites">
+  {% for suite in suites %}
+  <div class="suite">
+  {{suite}}
+  </div>
+  {% endfor %}
+</div>
+
+<div class="add-suite">
+  <form action="" method="POST">
+      {% csrf_token %}
+      {{ form }}
+      <input type="submit" value="Submit">
+  </form>
 </div>
 <div class="example">
     {% for example in examples %}
