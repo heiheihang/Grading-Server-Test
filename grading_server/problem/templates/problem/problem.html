@@ -23,7 +23,8 @@
 <div class="test-suites">
   {% for suite in suites %}
   <div class="suite">
-  {{suite}}
+
+  <a href = "{{suite.get_absolute_url}}"> {{suite}}</a>
   </div>
   {% endfor %}
 </div>

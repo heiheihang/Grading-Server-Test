@@ -104,21 +104,29 @@ def problem_create_view(request):
 
 
 @login_required
-def test_suite_create_view(request, problem_id, suite_id):
-    if request.method == 'GET':
-        form = ProblemModelForm(request.GET or None)
-        return render(request, 'problem/create.html', {'form': form})
+def test_suite_detail_view(request, problem_id, suite_id):
+    test_suite = get_object_or_404(ProblemTestSuiteModel, id=suite_id)
+    problem = test_suite.problem
+    pairs = test_suite.problemtestpairmodel_set.all()
+    print(test_suite)
     if request.method == 'POST':
-        form = ProblemModelForm(request.POST or None)
-        if form.is_valid():
-            form = form.save()
-            form.authors.add(request.user)
-            form.save()
-            form_id = form.id
-            print(form_id)
-            return redirect('/problem/'+str(form_id)+'/')
-        return render(request, 'problem/create.html', {'form': form})
-    return HttpResponseNotAllowed(['GET', 'POST'])
+        form = TestPairModelForm(request.POST)
+        if(form.is_valid()):
+            pair_number = len(pairs)
+            print(suite_number)
+            input_file = form.cleaned_data['input_file']
+            ouput_file = form.cleaned_data['ouput_file']
+            new_suite = ProblemTestPairModel(test_suite = test_suite, pair_number = pair_number, input = input_file, output = output_file)
+            new_suite.save()
+            return HttpResponseRedirect('/problem')
+    else:
+        form = TestPairModelForm()
+    context = {
+        'test_suite' : test_suite,
+        'problem' : problem,
+        'form' : form
+    }
+    return render(request, 'problem/test_suite_detail.html', context)
 
 @login_required
 def test_pair_create_view(request, problem_id, suite_id, pair_id):

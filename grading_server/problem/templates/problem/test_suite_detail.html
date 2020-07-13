@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load static %}
+<link rel="stylesheet" type="text/css" href="./ style.css">
+{% block content %}
+  <h1> hi </h1>
+  <h1> {{test_suite}} </h1>
+  <div class="add-pair">
+    <form action="" method="POST">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" value="Submit">
+    </form>
+  </div>
+{% endblock %}

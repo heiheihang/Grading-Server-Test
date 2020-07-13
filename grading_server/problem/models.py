@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
-
+from django.urls import reverse
 # Create your models here.
 
 
@@ -34,6 +34,9 @@ class ProblemTestSuiteModel(models.Model):
 
     def __str__(self):
         return (self.problem.name + ' test suite ' + str(self.problem_suite_number))
+
+    def get_absolute_url(self):
+        return reverse('suite_detail', args=[str(self.problem.id), str(self.id)])
 
 class ProblemTestPairModel(models.Model):
     test_suite = models.ForeignKey(ProblemTestSuiteModel, on_delete = models.CASCADE)
