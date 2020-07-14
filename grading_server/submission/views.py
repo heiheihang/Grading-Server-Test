@@ -3,7 +3,7 @@ from django.shortcuts import render
 # Create your views here.
 from django.http import HttpResponseRedirect
 from .models import FileSubssmion
-from .forms import FileSubssmionForm
+from .forms import FileSubmissionForm
 from django.contrib.auth.decorators import login_required
 
 
@@ -19,7 +19,7 @@ def index(request):
             submission.save()
             return HttpResponseRedirect('/')
     else:
-        form = FileSubssmionForm()
+        form = FileSubmissionForm()
     args = {}
     args['form'] = form
     return render(request, 'submission/index.html', args)

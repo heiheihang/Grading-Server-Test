@@ -2,8 +2,10 @@
 {% load static %}
 <link rel="stylesheet" type="text/css" href="./ style.css">
 {% block content %}
-  <h1> hi </h1>
   <h1> {{test_suite}} </h1>
+  <div class="suite description">
+    {{test_suite.test_suite_description}}
+  </div>
   <div class="add-pair">
     <form action="" method="POST">
         {% csrf_token %}
