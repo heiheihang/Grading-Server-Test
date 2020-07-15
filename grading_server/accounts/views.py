@@ -18,6 +18,7 @@ def custom_login(request):
             next_url = request.POST['next']
         else:
             next_url = '/'
+        args = {'form': form, 'next': next_url}
         if form.is_valid():
             username = request.POST['username']
             password = request.POST['password']
@@ -25,9 +26,11 @@ def custom_login(request):
             if user is not None:
                 login(request, user)
                 return redirect(next_url)
+            args.update(
+                {'message': 'Error: username and password does not match'})
         # TODO: timeout should be account-bound, instead of instance-bound
         sleep(3.0)
-        return render(request, 'accounts/login.html', {'form': form, 'next': next_url})
+        return render(request, 'accounts/login.html', args)
     if request.method == 'GET':
         if 'next' in request.GET:
             next_url = request.GET['next']
