@@ -10,5 +10,6 @@ def process_job(submission_pk):
     file_name = submission.file.name
     print(file_name)
     print('./media/' + file_name)
-    print(check_output(
-        ['./docker/docker.sh', 'py', './media/' + file_name, './media/problem_' + str(submission.problem.pk) + '/']))
+    output = check_output(
+        ['bash', './docker/docker.sh', 'py', './media/' + file_name, './media/problem_' + str(submission.problem.pk) + '/'])
+    print(output)
