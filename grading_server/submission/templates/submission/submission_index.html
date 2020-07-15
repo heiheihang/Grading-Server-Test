@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1> Problem Listing </h1>
+
+{% for problem in problems %}
+
+<a href= "{{problem.submission_url}}"> {{problem}} </a>
+
+{% endfor %}
+
+{% endblock %}

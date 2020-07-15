@@ -21,6 +21,6 @@ urlpatterns = [
     path('', include('home.urls')),
     path('accounts/', include('accounts.urls')),
     path('admin/', admin.site.urls),
-    path('submission/', include('submission.urls')),
+    path(r'submission/', include(('submission.urls', 'submission'), namespace='submission')),
     path('problem/', include('problem.urls')),
 ]

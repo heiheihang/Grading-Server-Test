@@ -13,6 +13,9 @@ class ProblemModel(models.Model):
     def __str__(self):
         return self.name
 
+    def submission_url(self):
+        return reverse('submission:submission_view', args=[str(self.id)])
+
 class ProblemTestModel(models.Model):
     parent = models.ForeignKey(ProblemModel, on_delete=models.CASCADE)
     input = models.FileField()

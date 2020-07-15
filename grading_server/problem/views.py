@@ -19,7 +19,7 @@ def problem_view(request, problem_id):
         form = TestSuiteModelForm(request.POST)
         if(form.is_valid()):
             suite_number = len(test_suites)
-            print(suite_number)
+            #print(suite_number)
             suite_description = form.cleaned_data['test_suite_description']
             new_suite = ProblemTestSuiteModel(problem = problem, problem_suite_number = suite_number, test_suite_description = suite_description)
             new_suite.save()

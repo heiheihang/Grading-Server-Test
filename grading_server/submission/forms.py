@@ -20,6 +20,7 @@ class FileSubssmionForm(ModelForm):
 
 class FileSubmissionForm(forms.Form):
     file = forms.FileField()
+    #problem = forms.
     #lang = forms.CharField(max_length=3)
     #submission_time = forms.DateTimeField()
 
