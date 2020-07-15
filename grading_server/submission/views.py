@@ -9,6 +9,8 @@ from django.core.files.storage import FileSystemStorage
 from problem.models import ProblemModel
 import datetime
 
+from .process_job import process_job
+
 from . import my_lib
 
 
@@ -44,7 +46,7 @@ def submission_view(request, problem_id):
             )
             print(current_submission)
             current_submission.save()
-
+            process_job(current_submission.pk)
             return HttpResponseRedirect('/submission/')
     else:
         form = FileSubmissionForm()
