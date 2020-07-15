@@ -2,8 +2,8 @@ from django.forms import ValidationError
 from django.utils.translation import ugettext_lazy as _
 from django.forms import ModelForm
 from django import forms
-from .models import FileSubssmion
-
+from .models import FileSubmission
+from submission.choices import *
 '''
 class FileSubssmionForm(ModelForm):
     class Meta:
@@ -20,6 +20,7 @@ class FileSubssmionForm(ModelForm):
 
 class FileSubmissionForm(forms.Form):
     file = forms.FileField()
+    lang = forms.ChoiceField(choices = LANG_CHOICES, required = True)
     #problem = forms.
     #lang = forms.CharField(max_length=3)
     #submission_time = forms.DateTimeField()
