@@ -11,7 +11,7 @@ def process_job(submission_pk):
     file_name = submission.file.name
     print(file_name)
     print('./media/' + file_name)
-    name_hash = md5(file_name)
+    name_hash = md5(file_name.encode()).hexdigest()
     output = check_output(
         ['bash', './docker/docker.sh', 'py', './media/' + file_name, './media/problem_' + str(submission.problem.pk) + '/', name_hash])
     print(output)
