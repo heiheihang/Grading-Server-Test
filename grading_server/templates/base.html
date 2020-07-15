@@ -27,10 +27,11 @@
         {% endblock %}
     </div>
     {% endblock %}
-    <a href="/problem">Problems</a>
-    <a href="/submission">Submit</a>
     {% block navbar %}
-    <!-- insert default navigation text for every page -->{% endblock %}
+        <!-- insert default navigation text for every page -->
+        <a href="/problem">Problems</a>
+        <a href="/submission">Submit</a>
+    {% endblock %}
     {% block message %}
     <!-- prints alerts and messages -->{% endblock %}
     {% block content %}
