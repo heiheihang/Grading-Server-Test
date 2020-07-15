@@ -24,13 +24,13 @@ def submission_view(request, problem_id):
 
             #input file handling---------------------------------------------------
             file = form.cleaned_data['file']
-            fs = FileSystemStorage()
-            time = my_lib.roundSeconds(datetime.datetime.now())
-            t = str(time.year) + '-' + str(time.month) + '-' + str(time.day) + '-' + str(time.hour) + '-' + str(time.minute) + '-' + str(time.second)
-            user_id = request.user.id
-            s = str(user_id) + '/' + str(problem_id) + "_" + str(t) + "_" + str(user_id)+".py"
-            filename = fs.save(s,file)    #file name is "problemID_Time_UserID.py"
-            print(s)
+            # fs = FileSystemStorage()
+            # time = my_lib.roundSeconds(datetime.datetime.now())
+            # t = str(time.year) + '-' + str(time.month) + '-' + str(time.day) + '-' + str(time.hour) + '-' + str(time.minute) + '-' + str(time.second)
+            # user_id = request.user.id
+            # s = str(user_id) + '/' + str(problem_id) + "_" + str(t) + "_" + str(user_id)+".py"
+            # filename = fs.save(s,file)    #file name is "problemID_Time_UserID.py"
+            # print(s)
             #FileSubssmion fields information---------------------------------------
             lang = form.cleaned_data['lang']
             submission_time = time
