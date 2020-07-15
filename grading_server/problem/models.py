@@ -49,4 +49,4 @@ class ProblemTestPairModel(models.Model):
 
     def __str__(self):
         return(self.test_suite.problem.name + ' test suite ' + str(self.test_suite.problem_suite_number)
-        + ' test pair ' + str(pair_number))
+               + ' test pair ' + str(self.pair_number))

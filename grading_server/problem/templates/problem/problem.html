@@ -21,20 +21,19 @@
 </div>
 
 <div class="test-suites">
-  {% for suite in suites %}
-  <div class="suite">
-
-  <a href = "{{suite.get_absolute_url}}"> {{suite}}</a>
-  </div>
-  {% endfor %}
+    {% for suite in suites %}
+    <div class="suite">
+        <a href="{{suite.get_absolute_url}}">{{suite}}</a>
+    </div>
+    {% endfor %}
 </div>
 
 <div class="add-suite">
-  <form action="" method="POST">
-      {% csrf_token %}
-      {{ form }}
-      <input type="submit" value="Submit">
-  </form>
+    <form action="" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Add">
+    </form>
 </div>
 <div class="example">
     {% for example in examples %}

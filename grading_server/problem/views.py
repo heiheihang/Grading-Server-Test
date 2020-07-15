@@ -23,7 +23,7 @@ def problem_view(request, problem_id):
             suite_description = form.cleaned_data['test_suite_description']
             new_suite = ProblemTestSuiteModel(problem = problem, problem_suite_number = suite_number, test_suite_description = suite_description)
             new_suite.save()
-            return HttpResponseRedirect('/problem')
+            return HttpResponseRedirect(str(suite_number + 1))
     else:
         form = TestSuiteModelForm()
 
@@ -110,15 +110,15 @@ def test_suite_detail_view(request, problem_id, suite_id):
     pairs = test_suite.problemtestpairmodel_set.all()
     print(test_suite)
     if request.method == 'POST':
-        form = TestPairModelForm(request.POST)
+        form = TestPairModelForm(request.POST, request.FILES)
         if(form.is_valid()):
             pair_number = len(pairs)
-            print(suite_number)
+            print(suite_id)
             input_file = form.cleaned_data['input_file']
-            ouput_file = form.cleaned_data['ouput_file']
+            output_file = form.cleaned_data['output_file']
             new_suite = ProblemTestPairModel(test_suite = test_suite, pair_number = pair_number, input = input_file, output = output_file)
             new_suite.save()
-            return HttpResponseRedirect('/problem')
+            return HttpResponseRedirect('/problem/' + str(problem_id))
     else:
         form = TestPairModelForm()
     context = {
