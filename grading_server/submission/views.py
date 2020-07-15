@@ -44,11 +44,13 @@ def submission_view(request, problem_id):
             )
             print(current_submission)
             current_submission.save()
+
             return HttpResponseRedirect('/submission/')
     else:
         form = FileSubmissionForm()
     context = {
-        'form' : form
+        'form' : form,
+        'problem': problem
     }
 
     return render(request, 'submission/submission_view.html', context)

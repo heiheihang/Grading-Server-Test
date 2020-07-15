@@ -8,6 +8,7 @@
 </div>
 {% endblock %}
 {% block content %}
+<div class="problem-statement"> {{problem}} </div>
 <div class="code-submission">
     <form id="submission-form" enctype="multipart/form-data" method="POST">
         {% csrf_token %}
