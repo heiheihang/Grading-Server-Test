@@ -33,7 +33,7 @@ def submission_view(request, problem_id):
             # print(s)
             #FileSubssmion fields information---------------------------------------
             lang = form.cleaned_data['lang']
-            submission_time = time
+            submission_time = my_lib.roundSeconds(datetime.datetime.now())
             user = request.user
             graded = False
 

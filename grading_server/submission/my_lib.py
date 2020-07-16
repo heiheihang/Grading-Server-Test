@@ -7,3 +7,4 @@ def roundSeconds(dateTimeObject):
         newDateTime = newDateTime + datetime.timedelta(seconds=1)
 
     return newDateTime.replace(microsecond=0)
+  

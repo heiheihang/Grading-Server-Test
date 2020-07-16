@@ -4,43 +4,59 @@
 
 <head>
     <meta charset="utf-8">
+    <link rel="stylesheet" href = "{% static "problem/css/style.css"%}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     {% block title %}<title>template</title>{% endblock %}
     {% block scripts %}{% endblock %}
 </head>
 
 <body>
     {% block topbar %}
-    <div class="topbar">
-        <a href="/"><img src="{% static 'tmp_logo.png' %}" /></a>
-        {% block user %}
-        <div class="user">
-            {% if user.is_authenticated %}
-            <a href="/profile/{{ user.get_username }}">{{ user.get_username }}</a>
-            |
-            <a href="/accounts/logout?next={{ request.path | urlencode }}">logout</a>
-            {% else %}
-            <a href="/accounts/login?next={{ request.path | urlencode }}">login</a>
-            |
-            <a href="/accounts/register">register</a>
-            {% endif %}
+    <div class="container-fluid">
+
+      <div class="topbar">
+        <div class="row">
+          <a href="/"><img src="{% static 'tmp_logo.png' %}" /></a>
         </div>
-        {% endblock %}
-    </div>
-    {% endblock %}
-    {% block navbar %}
-        <!-- insert default navigation text for every page -->
-        <a href="/problem">Problems</a>
-        <a href="/submission">Submit</a>
-    {% endblock %}
-    {% block message %}
-    <!-- prints alerts and messages -->{% endblock %}
-    {% block content %}
-    <!-- default content text (typically empty) -->{% endblock %}
-    {% block footer %}
-    <footer>
-        Here is some info in the footer
-    </footer>
-    {% endblock %}
+          {% block user %}
+        <div class="row">
+
+              {% if user.is_authenticated %}
+              <div class='col-sm-1'>
+                <a href="/profile/{{ user.get_username }}">{{ user.get_username }}</a>
+              </div>
+              
+              <div class='col-sm-1'>
+                <a href="/accounts/logout?next={{ request.path | urlencode }}">logout</a>
+              </div>
+              {% else %}
+              <a href="/accounts/login?next={{ request.path | urlencode }}">login</a>
+              |
+              <a href="/accounts/register">register</a>
+              {% endif %}
+
+          {% endblock %}
+        </div>
+      </div>
+      {% endblock %}
+      {% block navbar %}
+          <!-- insert default navigation text for every page -->
+          <a href="/problem">Problems</a>
+          <a href="/submission">Submit</a>
+      {% endblock %}
+      {% block message %}
+      <!-- prints alerts and messages -->{% endblock %}
+      {% block content %}
+      <!-- default content text (typically empty) -->{% endblock %}
+      {% block footer %}
+      <footer>
+          Here is some info in the footer
+      </footer>
+      {% endblock %}
+  </div>
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 </body>
 
 </html>
