@@ -2,15 +2,15 @@
 {% block content %}
 <div class="problem-list">
     <table class="problem-list-table">
-        <th>
+        <tr>
         <th>Name</th>
         <th>Authors</th>
-        </th>
+        </tr>
         {% for problem in problems %}
-        <th>
-        <th><a href="{{ problem.id }}">{{ problem.name }}</a></th>
-        <th>{{ problem.authors }}</th>
-        </th>
+        <tr>
+        <td><a href="{{ problem.id }}">{{ problem.name }}</a></td>
+        <td>{{ problem.authors }}</td>
+        </tr>
         {% endfor %}
     </table>
 </div>
