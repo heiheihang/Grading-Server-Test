@@ -11,69 +11,40 @@
 </head>
 
 <body>
-    {% block topbar %}
+
     <div class="container-fluid">
-
-      <div class="topbar">
         <div class="row">
-          <a href="/"><img src="{% static 'tmp_logo.png' %}" /></a>
-        </div>
-          {% block user %}
-        <div class="row">
+          <div class="col-sm-2">
+            {% block navbar %}
+            <div class="sidebar-nav">
+              <div class="logo"><a href="/"><img src="{% static 'tmp_logo.png' %}" /></a></div>
 
-              {% if user.is_authenticated %}
-              <div class='col-sm-1'>
-                <a href="/profile/{{ user.get_username }}">{{ user.get_username }}</a>
-              </div>
+        <div><a href="/problem">Problems</a>  </div>
+        <div><a href="/submission">Submit</a></div>
+          <!-- insert default navigation text for every page -->
+          {% if user.is_authenticated %}
+          <div><a href="/profile/{{ user.get_username }}">{{ user.get_username }}</a></div>
 
-              <div class='col-sm-1'>
-                <a href="/accounts/logout?next={{ request.path | urlencode }}">logout</a>
-              </div>
-              {% else %}
-              <a href="/accounts/login?next={{ request.path | urlencode }}">login</a>
-              |
-              <a href="/accounts/register">register</a>
-              {% endif %}
-
+          <div> <a href="/accounts/logout?next={{ request.path | urlencode }}">logout</a></div>
+          {% else %}
+          <div><a href="/accounts/login?next={{ request.path | urlencode }}">login</a></div>
+          |
+          <div><a href="/accounts/register">register</a></div>
+          {% endif %}
           {% endblock %}
         </div>
       </div>
-      {% endblock %}
-      {% block navbar %}
-      <div class="navbar">
-      <div class="row">
-        <div class='col-sm-3'>
-          <a href="/problem">Problems</a>
-        </div>
-        <div class='col-sm-3'>
-          <a href="/submission">Submit</a>
-        </div>
-          <!-- insert default navigation text for every page -->
-          {% if user.is_authenticated %}
-          <div class='col-sm-3'>
-            <a href="/profile/{{ user.get_username }}">{{ user.get_username }}</a>
-          </div>
-
-          <div class='col-sm-3'>
-            <a href="/accounts/logout?next={{ request.path | urlencode }}">logout</a>
-          </div>
-          {% else %}
-          <div class='col-sm-3'>
-            <a href="/accounts/login?next={{ request.path | urlencode }}">login</a>
-          </div>
-          |
-          <div class='col-sm-3'>
-            <a href="/accounts/register">register</a>
-          </div>
-          {% endif %}
-
-        </div>
+      <div class="col-sm-10">
+        {% block message %}
+        <!-- prints alerts and messages -->{% endblock %}
+        {% block content %}
+        <!-- default content text (typically empty) -->{% endblock %}
       </div>
-      {% endblock %}
-      {% block message %}
-      <!-- prints alerts and messages -->{% endblock %}
-      {% block content %}
-      <!-- default content text (typically empty) -->{% endblock %}
+      </div>
+    </div>
+
+
+
       {% block footer %}
       <footer>
           Here is some info in the footer
