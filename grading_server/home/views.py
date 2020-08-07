@@ -14,10 +14,12 @@ def index(request):
     return render(request, "index.html")
 
 def user_view(request, user_id):
-    user_object = get_object_or_404(User, user_id)
+    user_object = get_object_or_404(User, pk=user_id)
     user_profile = user_object.userprofile
 
     context = {
-        'user_profile' = user_profile,
-        'user' = user_object
+        'user_profile' : user_profile,
+        'user' : user_object
     }
+
+    return render(request, 'user_profile.html', context)

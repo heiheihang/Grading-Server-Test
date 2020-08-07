@@ -23,7 +23,7 @@
         <div><a href="/submission">Submit</a></div>
           <!-- insert default navigation text for every page -->
           {% if user.is_authenticated %}
-          <div><a href="/profile/{{ user.get_username }}">{{ user.get_username }}</a></div>
+          <div><a href="{{user.userprofile.get_absolute_url}}">{{ user.get_username }}</a></div>
 
           <div> <a href="/accounts/logout?next={{ request.path | urlencode }}">logout</a></div>
           {% else %}

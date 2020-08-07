@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}<title>Homg Page</title>{% endblock %}
+{% block content %}
+
+<div class="name">
+  <h1>{{user.username}}</h1>
+</div>
+
+<div class="elo">
+  {{user_profile.elo}}
+</div>
+
+<div class="main">
+    This is your profile
+</div>
+{% endblock %}
