@@ -9,7 +9,8 @@ def file_submission_name(instance, filename):
     time = instance.submission_time.strftime('%Y-%m-%d-%H-%M-%S')
     user_id = instance.user.id
     problem_id = instance.problem.id
-    return 'user_{0}/{1}_{2}_{0}'.format(user_id, problem_id, time)
+    submission_id = instance.pk
+    return 'user_{0}/{1}_{0}_{2}/submission'.format(user_id, problem_id, time)
 
 class FileSubmission(models.Model):
     #LANGUAGES = [('PY', 'Python 3.7')]
@@ -19,6 +20,7 @@ class FileSubmission(models.Model):
     submission_time = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     graded = models.BooleanField(default=False)
+    report = models.FileField(upload_to='random/', blank = True, null = True)
     problem = models.ForeignKey(ProblemModel, on_delete=models.CASCADE, default = None, blank = True, null= True)
 
 

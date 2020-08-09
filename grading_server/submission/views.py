@@ -44,7 +44,7 @@ def submission_view(request, problem_id):
                 graded = graded,
                 problem = problem
             )
-            print(current_submission)
+            #print(current_submission)
             current_submission.save()
             process_job(current_submission.pk)
             return HttpResponseRedirect('/submission/')
