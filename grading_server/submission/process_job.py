@@ -18,11 +18,17 @@ def process_job(submission_pk):
     user_id = submission.user.id
     problem_id = submission.problem.id
     submission_id = submission.pk
-    with open('./media/user_{0}/{1}_{0}_{2}_report'.format(user_id, problem_id, time_s), 'w+') as f:
-        output = Popen(
-            ['bash', './docker/docker.sh', 'py', './media/' + file_name, './media/problem_' + str(submission.problem.pk) + '/', name_hash], stdout=f)
-        fs = FileSystemStorage()
-        s = './user_{0}/{1}_{0}_{2}_report'.format(user_id, problem_id, time_s)
-        filename = fs.save(s,f)
-        submission.report = filename
-        submission.save()
+    f = open('./media/user_{0}/{1}_{0}_{2}_report'.format(user_id, problem_id, time_s), 'w+')
+
+    output = Popen(
+        ['bash', './docker/docker.sh', 'py', './media/' + file_name, './media/problem_' + str(submission.problem.pk) + '/', name_hash], stdout=f)
+    f.close()
+    f = open('./media/user_{0}/{1}_{0}_{2}_report'.format(user_id, problem_id, time_s), 'w+')
+    fs = FileSystemStorage()
+    s = './user_{0}/{1}_{0}_{2}_report'.format(user_id, problem_id, time_s)
+    #filename = fs.save(s,f)
+    #print(filename)
+    submission.graded = True
+    submission.report = s
+    submission.save()
+    f.close()

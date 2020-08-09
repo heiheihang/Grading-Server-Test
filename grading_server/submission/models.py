@@ -21,6 +21,7 @@ class FileSubmission(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     graded = models.BooleanField(default=False)
     report = models.FileField(upload_to='random/', blank = True, null = True)
+    feedback = models.CharField(max_length=200, null = True, blank= True)
     problem = models.ForeignKey(ProblemModel, on_delete=models.CASCADE, default = None, blank = True, null= True)
 
 

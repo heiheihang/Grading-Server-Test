@@ -17,6 +17,7 @@ from . import my_lib
 @login_required
 def submission_view(request, problem_id):
     problem = get_object_or_404(ProblemModel, id=problem_id)
+    user = request.user
     #print(request.user)
     if request.method == 'POST':
         form = FileSubmissionForm(request.POST, request.FILES)
@@ -34,7 +35,7 @@ def submission_view(request, problem_id):
             #FileSubssmion fields information---------------------------------------
             lang = form.cleaned_data['lang']
             submission_time = my_lib.roundSeconds(datetime.datetime.now())
-            user = request.user
+
             graded = False
 
             current_submission = FileSubmission(
@@ -47,9 +48,16 @@ def submission_view(request, problem_id):
             #print(current_submission)
             current_submission.save()
             process_job(current_submission.pk)
+
             return HttpResponseRedirect('/submission/')
     else:
         form = FileSubmissionForm()
+
+    previous_submissions = FileSubmission.objects.all().filter(user = user, problem = problem).order_by('-submission_time')
+    if(len(previous_submissions) > 10):
+        previous_submissions = previous_submissions[:10]
+    for x in previous_submissions:
+        my_lib.parse_report(x)
     context = {
         'form' : form,
         'problem': problem
