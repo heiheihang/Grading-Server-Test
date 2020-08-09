@@ -60,7 +60,8 @@ def submission_view(request, problem_id):
         my_lib.parse_report(x)
     context = {
         'form' : form,
-        'problem': problem
+        'problem': problem,
+        'previous_submissions' : previous_submissions
     }
 
     return render(request, 'submission/submission_view.html', context)

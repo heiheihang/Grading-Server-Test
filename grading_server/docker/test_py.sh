@@ -9,9 +9,9 @@ do
     #echo "=====" >> summary
     cat tests/$line/err >> summary
     #echo "=====" >> summary
-    cat tests/$line/stats | grep "User time" >> summary
-    cat tests/$line/stats | grep "System time" >> summary
-    cat tests/$line/stats | grep "Maximum resident" >> summary
+    #cat tests/$line/stats | grep "User time" >> summary
+    #cat tests/$line/stats | grep "System time" >> summary
+    #cat tests/$line/stats | grep "Maximum resident" >> summary
     echo "==========" >> summary
 done < tests_list
 cat summary

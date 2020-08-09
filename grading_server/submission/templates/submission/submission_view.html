@@ -20,4 +20,13 @@
     </form>
 
 </div>
+<div class="previous_submissions">
+  {% for sub in previous_submissions %}
+    {% if sub.feedback %}
+      <p>{{sub.submission_time}} </p>
+      <p>{{sub.feedback|linebreaks}} </p>
+      <p> ----------------------------- </p>
+    {% endif  %}
+  {% endfor %}
+</div>
 {% endblock %}

@@ -26,7 +26,30 @@ def parse_report(s):
     start = 0
     comment = ""
     for line in f:
-        if(line[0] == '=' or start == 1):
+
+        if(line[0] == '='):
+
+            if(start > 0 and start < 3):
+                comment += " OK "+ '\n'
+            elif(start > 2):
+                comment += " WRONG"  + '\n'
             start = 1
-            print(line)
+            comment += line
+            #print(line)
+        elif(start == 1):
+            #print("test " + line)
+            comment += "test " + line
+            start += 1
+        elif(start > 1 and start < 5):
+            start += 1
+        elif(start == 5):
+            #print("Expecting:" + line)
+            comment += "Expecting:" + line
+            start += 1
+        elif(start == 6):
+            #print("Received:" + line)
+            comment += "Received:" + line
+    print(comment)
+    s.feedback = comment
+    s.save()
     return
