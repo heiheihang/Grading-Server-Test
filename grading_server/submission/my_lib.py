@@ -25,10 +25,16 @@ def parse_report(s):
         return
     start = 0
     comment = ""
+    user_in = []
+    expect = []
     for line in f:
 
         if(line[0] == '='):
-
+            for x in range(min(len(expect),len(user_in))):
+                comment += "Your Output: " + user_in[x]
+                comment += "Expected: " + expect[x]
+            user_in = []
+            expect = []
             if(start > 0 and start < 3):
                 comment += " OK "+ '\n'
             elif(start > 2):
@@ -42,13 +48,17 @@ def parse_report(s):
             start += 1
         elif(start > 1 and start < 5):
             start += 1
-        elif(start == 5):
+        elif( line[0] == '-'):
             #print("Expecting:" + line)
-            comment += "Expecting:" + line
-            start += 1
-        elif(start == 6):
+            #comment += "Expecting:" + line
+            user_in.append(line[0:])
+            #start += 1
+        elif(line[0] == '+'):
             #print("Received:" + line)
-            comment += "Received:" + line
+            #comment += "Received:" + line
+            expect.append(line[0:])
+            #start -= 1
+
     print(comment)
     s.feedback = comment
     s.save()
