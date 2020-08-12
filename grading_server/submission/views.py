@@ -13,6 +13,7 @@ from .process_job import process_job
 
 from . import my_lib
 
+import django_rq
 
 @login_required
 def submission_view(request, problem_id):
@@ -47,7 +48,8 @@ def submission_view(request, problem_id):
             )
             #print(current_submission)
             current_submission.save()
-            process_job(current_submission.pk)
+            django_rq.enqueue(process_job, current_submission.pk)
+            #process_job(current_submission.pk)
 
             return HttpResponseRedirect('/submission/')
     else:

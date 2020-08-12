@@ -23,4 +23,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path(r'submission/', include(('submission.urls', 'submission'), namespace='submission')),
     path('problem/', include('problem.urls')),
+    path('django-rq/', include('django_rq.urls')),
 ]
