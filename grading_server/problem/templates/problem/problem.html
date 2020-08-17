@@ -3,10 +3,19 @@
 <link rel="stylesheet" type="text/css" href="./ style.css">
 {% block content %}
 <script>
-    function copy(div_id) {
-        var text = document.getElementById(div_id);
-        text.select();
-        document.execCommand("copy");
+    function copy(containerid) {
+        if (document.selection) {
+            var range = document.body.createTextRange();
+            range.moveToElementText(document.getElementById(containerid));
+            range.select().createTextRange();
+            document.execCommand("copy");
+        } else if (window.getSelection) {
+            var range = document.createRange();
+            range.selectNode(document.getElementById(containerid));
+            window.getSelection().addRange(range);
+            document.execCommand("copy");
+            //alert("Text has been copied, now paste in the text-area")
+        }
     }
 </script>
 <div class="problem-header">
@@ -15,46 +24,34 @@
     <a href="edit">Edit</a>
     {% endif %}
 </div>
-<div class="problem-statement">
-    {{ problem.problem_statement }}
+<div class='authors'>
+    authors: {{ problem.author_string }}
 </div>
+<pre><div class="problem-statement">{{ problem.problem_statement }}
+</div></pre>
 
-<div class="test-suites">
-    {% for suite in suites %}
-    <div class="suite">
-        <a href="{{suite.get_absolute_url}}">{{suite}}</a>
-    </div>
-    {% endfor %}
-</div>
-
-<div class="add-suite">
-    <form action="" method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Add">
-    </form>
-</div>
 <div class="example">
+    <div>Tests:</div>
     {% for example in examples %}
-    <div class="example" id="{{ example.task_num }}-{{ example.sub_task_num }}">
+    {{ example.test_suite.test_suite_description }}
+    <div class="example" id="{{ example.test_suite.problem_suite_number }}-{{ example.pair_number }}">
         <div class="input">
             <div class="input-header">Input<button
-                    onclick="copy('{{ example.task_num }}-{{ example.sub_task_num }}-input')">Copy</button>
+                    onclick="copy('{{ example.test_suite.problem_suite_number }}-{{ example.pair_number }}-input')">Copy</button>
             </div>
-            <div class="input-main" id="{{ example.task_num }}-{{ example.sub_task_num }}-input">{{ example.input }}
-            </div>
+            <pre><code class="input-main" id="{{ example.test_suite.problem_suite_number }}-{{ example.pair_number }}-input">{{ example.input.read.decode }}</code></pre>
         </div>
         <div class="output">
             <div class="output-header">Output<button
-                    onclick="copy('{{ example.task_num }}-{{ example.sub_task_num }}-output')">Copy</button>
+                    onclick="copy('{{ example.test_suite.problem_suite_number }}-{{ example.pair_number }}-output')">Copy</button>
             </div>
-            <div class="output-main" id="{{ example.task_num }}-{{ example.sub_task_num }}-output">{{ example.output }}
-            </div>
+            <pre><code class="output-main" id="{{ example.test_suite.problem_suite_number }}-{{ example.pair_number }}-output">{{ example.output.read.decode }}</code></pre>
         </div>
     </div>
     {% endfor %}
 </div>
 <div class="submit">
+    TODO: submission code box here
     ...
 </div>
 {% endblock %}

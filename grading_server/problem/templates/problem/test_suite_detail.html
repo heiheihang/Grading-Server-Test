@@ -3,14 +3,30 @@
 <link rel="stylesheet" type="text/css" href="./ style.css">
 {% block content %}
 <h1> {{test_suite}} </h1>
+<div class='back_button'><a href='../edit'>Back</a></div>
+<div class='delete_button'><a href='delete' onclick="return confirm('Are you sure?')">Delete test suite</a></div>
+
 <div class="suite description">
   {{test_suite.test_suite_description}}
 </div>
+
+<div class="test_pairs">
+  {% for pair in test_pairs %}
+  <div class="pair-{{ pair.pair_number }}">
+    <div class="pair-name">Test pair #{{ pair.pair_number }} <a href="{{ pair.pair_number}}/delete">Delete</a></div>
+    input:
+    <pre><code class="input-main" id="{{ pair.pair_number }}-input">{{ pair.input.read.decode }}</code></pre>
+    Output:
+    <pre><code class="output-main" id="{{ pair.pair_number }}-output">{{ pair.output.read.decode }}</code></pre>
+  </div>
+  {% endfor %}
+</div>
+
 <div class="add-pair">
-  <form action="" method="POST" enctype="multipart/form-data">
+  <form action="new_test" method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
-    <input type="submit" value="Submit">
+    <input type="submit" value="New test">
   </form>
 </div>
 {% endblock %}

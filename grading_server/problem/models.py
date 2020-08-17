@@ -16,19 +16,17 @@ class ProblemModel(models.Model):
     def submission_url(self):
         return reverse('submission:submission_view', args=[str(self.id)])
 
-class ProblemTestModel(models.Model):
-    parent = models.ForeignKey(ProblemModel, on_delete=models.CASCADE)
-    input = models.FileField()
-    output = models.FileField()
-    task_num = models.PositiveSmallIntegerField()
-    sub_task_num = models.PositiveSmallIntegerField()
-    error_message = models.CharField(max_length=200)
+    def author_string(self):
+        authors_names = [a.get_username() for a in self.authors.all()]
+        authors_names.sort()
+        num_of_authors = len(authors_names)
+        if num_of_authors == 0:
+            return 'None'
+        elif num_of_authors == 1:
+            return authors_names[0]
+        else:
+            return ', '.join(authors_names[:-1]) + ' and ' + authors_names[-1]
 
-    class Meta:
-        constraints = [
-            models.UniqueConstraint(
-                fields=['parent', 'task_num', 'sub_task_num'], name='unique task number')
-        ]
 
 class ProblemTestSuiteModel(models.Model):
     problem = models.ForeignKey(ProblemModel, on_delete = models.CASCADE)
@@ -39,7 +37,7 @@ class ProblemTestSuiteModel(models.Model):
         return (self.problem.name + ' test suite ' + str(self.problem_suite_number))
 
     def get_absolute_url(self):
-        return reverse('suite_detail', args=[str(self.problem.id), str(self.id)])
+        return reverse('suite_detail', args=[str(self.problem.id), str(self.problem_suite_number)])
 
 
 def test_file_path(instance, filename):
