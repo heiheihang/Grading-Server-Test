@@ -36,49 +36,24 @@ def problem_view(request, problem_id):
 
 @login_required
 def problem_edit_view(request, problem_id):
-    #ProblemTestModelModelFormSet = modelformset_factory(ProblemTestModel,
-    #                                                    form=ProblemTestModelForm, fields=['input', 'output', 'task_num', 'sub_task_num', 'error_message'], extra=1)
     problem = get_object_or_404(ProblemModel, id=problem_id)
     test_suites = problem.problemtestsuitemodel_set.all()
     if not problem.authors.filter(pk=request.user.pk).exists():
         return HttpResponseForbidden()
     if request.method == 'GET':
-        #tests = ProblemTestModel.objects.all().filter(parent__id=problem_id).distinct()
-        #form_set = ProblemTestModelModelFormSet(initial=tests, prefix='tests')
-        test_suites = problem.problemtestsuitemodel_set.all()
-        add_suite_form = TestSuiteModelForm()
-
         return render(request, 'problem/edit.html', {'problem': ProblemModelForm(instance=problem, prefix='main'),
-            'suites': test_suites,
-            'add_suite_form': add_suite_form})
+            'suites': test_suites,})
     if request.method == 'POST':
         form = ProblemModelForm(request.POST or None, request.FILES or None,
                                 prefix='main', instance=problem)
-        test_suites = problem.problemtestsuitemodel_set.all()
-        add_suite_form = TestSuiteModelForm()
-        #form_set = ProblemTestModelModelFormSet(
-        #    request.POST or None, request.FILES or None, prefix='tests')
         if form.is_valid():
             form.save()
             print('OK')
             # TODO: somehow output telling user form has been saved
-        #if form_set.is_valid():
-        #    form_set.save(commit=False)
-        #    clean_data = form_set.cleaned_data
-        #    print(form_set)
-        #    print(clean_data)
-        #    for f in form_set:
-        #        print(f.fields['task_num'])
-        #        f.fields['parent'] = problem
-        #    form_set.save()
-        #    print('formset OK')
         else:
-            print(form_set.errors)
-            #clean_data = form_set.cleaned_data
-            #form_set = ProblemTestModelModelFormSet(initial=clean_data)
+            print(form.errors)
         return render(request, 'problem/edit.html', {'problem': form,
-            'suites': test_suites,
-            'add_suite_form': add_suite_form})
+            'suites': test_suites,})
     return HttpResponseNotAllowed(['GET', 'POST'])
 
 
