@@ -128,16 +128,7 @@ def test_suite_detail_view(request, problem_id, suite_id):
                 
         new_test_pair_form = TestPairModelForm(request.POST, request.FILES, prefix='new')
         if(new_test_pair_form.is_valid()):
-            # change assigning new pair number
-            # suppose we had pairs #1 #2 #3, we deleted #2 so we have #1 #3
-            # next pair should be #4
-            test_pair_numbers = [suite.pair_number for suite in test_pairs]
-            test_pair_numbers.sort()
-            if(len(test_pair_numbers) == 0):
-                pair_number = 1
-            else:
-                pair_number = test_pair_numbers[-1] + 1
-
+            pair_number = test_suite.get_new_pair_number()
             input_file = new_test_pair_form.cleaned_data['input_file']
             output_file = new_test_pair_form.cleaned_data['output_file']
             new_suite = ProblemTestPairModel(suite = test_suite, pair_number = pair_number, input = input_file, output = output_file)
@@ -163,14 +154,7 @@ def test_suite_create_view(request, problem_id):
     problem = get_object_or_404(ProblemModel, id=problem_id)
     if not problem.authors.filter(pk=request.user.pk).exists():
         return HttpResponseForbidden()
-    test_suites = ProblemTestSuiteModel.objects.filter(problem=problem)
-    print(test_suites)
-    test_suites_numbers = [suite.suite_number for suite in test_suites]
-    test_suites_numbers.sort()
-    if(len(test_suites_numbers) == 0):
-        new_suite_number = 1
-    else:
-        new_suite_number = test_suites_numbers[-1] + 1
+    new_suite_number = problem.get_new_suite_number()
     new_suite = ProblemTestSuiteModel(problem=problem, suite_number=new_suite_number, description='')
     print(new_suite)
     new_suite.save()
@@ -196,14 +180,7 @@ def test_pair_create_view(request, problem_id, suite_id):
         visible = form.cleaned_data['visible']
         input_file = form.cleaned_data['input_file']
         output_file = form.cleaned_data['output_file']
-
-        test_pairs = ProblemTestPairModel.objects.filter(suite=test_suite)
-        test_pair_numbers = [suite.pair_number for suite in test_pairs]
-        test_pair_numbers.sort()
-        if(len(test_pair_numbers) == 0):
-            pair_number = 1
-        else:
-            pair_number = test_pair_numbers[-1] + 1
+        pair_number = test_suite.get_new_pair_number()
 
         new_test_pair = ProblemTestPairModel(suite=test_suite, pair_number=pair_number, visible=visible, input=input_file, output=output_file)
         new_test_pair.save()

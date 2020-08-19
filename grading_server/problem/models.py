@@ -27,6 +27,14 @@ class ProblemModel(models.Model):
         else:
             return ', '.join(authors_names[:-1]) + ' and ' + authors_names[-1]
 
+    def get_new_suite_number(self):
+        # should this function be here (inside this class)?
+        existing_suites = ProblemTestSuiteModel.objects.filter(problem=self.pk)
+        if len(existing_suites) == 0:
+            return 1
+        suite_numbers = [suite.suite_number for suite in existing_suites]
+        suite_numbers.sort()
+        return suite_numbers[-1] + 1
 
 class ProblemTestSuiteModel(models.Model):
     problem = models.ForeignKey(ProblemModel, on_delete = models.CASCADE)
@@ -39,6 +47,16 @@ class ProblemTestSuiteModel(models.Model):
     def get_absolute_url(self):
         return reverse('suite_detail', args=[str(self.problem.id), str(self.suite_number)])
 
+    def get_new_pair_number(self):
+        # should this function be here (inside this class)?
+        # suppose we had pairs #1 #3
+        # next pair should be #4
+        existing_pairs = ProblemTestPairModel.objects.filter(suite=self.pk)
+        if len(existing_pairs) == 0:
+            return 1
+        test_pair_numbers = [pair.pair_number for pair in existing_pairs]
+        test_pair_numbers.sort()
+        return test_pair_numbers[-1] + 1
 
 def test_file_path(instance, filename):
     problem_id = instance.suite.problem.pk
