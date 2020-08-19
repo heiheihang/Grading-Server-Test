@@ -5,6 +5,8 @@
 ```
 python3 -m pip install django-rq
 
+#on a different thread 
+redis-server
 # on a different thread (console)
 py manage.py rqworker default
 ```
