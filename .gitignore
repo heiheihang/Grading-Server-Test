@@ -2,3 +2,7 @@ __pycache__
 tmp
 .cph
 .vscode
+grading_server/db.sqlite3
+grading_server/home/migrations/0001_initial.py
+grading_server/problem/migrations/0006_delete_problemtestmodel.py
+grading_server/submission/migrations/0010_auto_20200819_0158.py
