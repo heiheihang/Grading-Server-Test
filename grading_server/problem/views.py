@@ -14,13 +14,13 @@ from .forms import ProblemModelForm, TestSuiteModelForm, TestPairModelForm
 def problem_view(request, problem_id):
     problem = get_object_or_404(ProblemModel, id=problem_id)
     example_suites = ProblemTestSuiteModel.objects.filter(problem=problem)
-    examples = ProblemTestPairModel.objects.filter(test_suite__in=[suite.pk for suite in example_suites])
+    examples = ProblemTestPairModel.objects.filter(suite__in=[suite.pk for suite in example_suites])
     if request.method == 'POST':
         if(form.is_valid()):
-            suite_number = len(test_suites)
+            suite_number = len(example_suites)
             #print(suite_number)
-            suite_description = form.cleaned_data['test_suite_description']
-            new_suite = ProblemTestSuiteModel(problem = problem, problem_suite_number = suite_number, test_suite_description = suite_description)
+            suite_description = form.cleaned_data['description']
+            new_suite = ProblemTestSuiteModel(problem = problem, suite_number = suite_number, description = suite_description)
             new_suite.save()
             return HttpResponseRedirect(str(suite_number + 1))
 
@@ -111,13 +111,13 @@ def problem_create_view(request):
 
 @login_required
 def test_suite_detail_view(request, problem_id, suite_id):
-    test_suite = get_object_or_404(ProblemTestSuiteModel, problem_suite_number=suite_id, problem__id=problem_id)
+    test_suite = get_object_or_404(ProblemTestSuiteModel, suite_number=suite_id, problem__id=problem_id)
     problem = test_suite.problem
     if not problem.authors.filter(pk=request.user.pk).exists():
         return HttpResponseForbidden()
     pairs = test_suite.problemtestpairmodel_set.all()
     print(test_suite)
-    test_pairs = ProblemTestPairModel.objects.filter(test_suite=test_suite.pk)
+    test_pairs = ProblemTestPairModel.objects.filter(suite=test_suite.pk)
     if request.method == 'POST':
         form = TestPairModelForm(request.POST, request.FILES)
         if(form.is_valid()):
@@ -125,7 +125,7 @@ def test_suite_detail_view(request, problem_id, suite_id):
             print(suite_id)
             input_file = form.cleaned_data['input_file']
             output_file = form.cleaned_data['output_file']
-            new_suite = ProblemTestPairModel(test_suite = test_suite, pair_number = pair_number, input = input_file, output = output_file)
+            new_suite = ProblemTestPairModel(suite = test_suite, pair_number = pair_number, input = input_file, output = output_file)
             new_suite.save()
             return HttpResponseRedirect('/problem/' + str(problem_id))
     else:
@@ -145,20 +145,20 @@ def test_suite_create_view(request, problem_id):
         return HttpResponseForbidden()
     test_suites = ProblemTestSuiteModel.objects.filter(problem=problem)
     print(test_suites)
-    test_suites_numbers = [suite.problem_suite_number for suite in test_suites]
+    test_suites_numbers = [suite.suite_number for suite in test_suites]
     test_suites_numbers.sort()
     if(len(test_suites_numbers) == 0):
         new_suite_number = 1
     else:
         new_suite_number = test_suites_numbers[-1] + 1
-    new_suite = ProblemTestSuiteModel(problem=problem, problem_suite_number=new_suite_number, test_suite_description='')
+    new_suite = ProblemTestSuiteModel(problem=problem, suite_number=new_suite_number, description='')
     print(new_suite)
     new_suite.save()
     return redirect(test_suite_detail_view, problem_id, new_suite_number)
 
 @login_required
 def test_suite_delete_view(request, problem_id, suite_id):
-    test_suite = get_object_or_404(ProblemTestSuiteModel, problem_suite_number=suite_id, problem__id=problem_id)
+    test_suite = get_object_or_404(ProblemTestSuiteModel, suite_number=suite_id, problem__id=problem_id)
     if not test_suite.problem.authors.filter(pk=request.user.pk).exists():
         return HttpResponseForbidden()
     test_suite.delete()
@@ -166,7 +166,7 @@ def test_suite_delete_view(request, problem_id, suite_id):
 
 @login_required
 def test_pair_create_view(request, problem_id, suite_id):
-    test_suite = get_object_or_404(ProblemTestSuiteModel, problem_suite_number=suite_id, problem__id=problem_id)
+    test_suite = get_object_or_404(ProblemTestSuiteModel, suite_number=suite_id, problem__id=problem_id)
     if not test_suite.problem.authors.filter(pk=request.user.pk).exists():
         return HttpResponseForbidden()
     if request.method == 'POST':
@@ -176,7 +176,7 @@ def test_pair_create_view(request, problem_id, suite_id):
         input_file = form.cleaned_data['input_file']
         output_file = form.cleaned_data['output_file']
 
-        test_pairs = ProblemTestPairModel.objects.filter(test_suite=test_suite)
+        test_pairs = ProblemTestPairModel.objects.filter(suite=test_suite)
         test_pair_numbers = [suite.pair_number for suite in test_pairs]
         test_pair_numbers.sort()
         if(len(test_pair_numbers) == 0):
@@ -184,7 +184,7 @@ def test_pair_create_view(request, problem_id, suite_id):
         else:
             pair_number = test_pair_numbers[-1] + 1
 
-        new_test_pair = ProblemTestPairModel(test_suite=test_suite, pair_number=pair_number, input=input_file, output=output_file)
+        new_test_pair = ProblemTestPairModel(suite=test_suite, pair_number=pair_number, input=input_file, output=output_file)
         new_test_pair.save()
         return redirect(test_suite_detail_view, problem_id, suite_id)
     return HttpResponseNotAllowed(['POST'])
@@ -192,8 +192,8 @@ def test_pair_create_view(request, problem_id, suite_id):
 
 @login_required
 def test_pair_delete_view(request, problem_id, suite_id, pair_id):
-    test_pair = get_object_or_404(ProblemTestPairModel, pair_number=pair_id, test_suite__problem_suite_number=suite_id, test_suite__problem__id=problem_id)
-    if not test_pair.test_suite.problem.authors.filter(pk=request.user.pk).exists():
+    test_pair = get_object_or_404(ProblemTestPairModel, pair_number=pair_id, suite__suite_number=suite_id, suite__problem__id=problem_id)
+    if not test_pair.suite.problem.authors.filter(pk=request.user.pk).exists():
         return HttpResponseForbidden()
     test_pair.delete()
     return redirect(test_suite_detail_view, problem_id, suite_id)

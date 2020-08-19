@@ -52,15 +52,15 @@
         "pk": 1,
         "fields": {
             "problem": 1,
-            "problem_suite_number": 0,
-            "test_suite_description": "normal tests"
+            "suite_number": 0,
+            "description": "normal tests"
         }
     },
     {
         "model": "problem.problemtestpairmodel",
         "pk": 1,
         "fields": {
-            "test_suite": 1,
+            "suite": 1,
             "pair_number": 0,
             "input": "problem_1/test1/input",
             "output": "problem_1/test1/expect"
@@ -70,7 +70,7 @@
         "model": "problem.problemtestpairmodel",
         "pk": 2,
         "fields": {
-            "test_suite": 1,
+            "suite": 1,
             "pair_number": 2,
             "input": "problem_1/test2/input",
             "output": "problem_1/test2/expect"
@@ -81,15 +81,15 @@
         "pk": 2,
         "fields": {
             "problem": 1,
-            "problem_suite_number": 1,
-            "test_suite_description": "tests to show wrong result"
+            "suite_number": 1,
+            "description": "tests to show wrong result"
         }
     },
     {
         "model": "problem.problemtestpairmodel",
         "pk": 3,
         "fields": {
-            "test_suite": 2,
+            "suite": 2,
             "pair_number": 0,
             "input": "problem_1/wrong/input",
             "output": "problem_1/wrong/expect"
@@ -100,15 +100,15 @@
         "pk": 3,
         "fields": {
             "problem": 1,
-            "problem_suite_number": 2,
-            "test_suite_description": "tests to show error"
+            "suite_number": 2,
+            "description": "tests to show error"
         }
     },
     {
         "model": "problem.problemtestpairmodel",
         "pk": 4,
         "fields": {
-            "test_suite": 3,
+            "suite": 3,
             "pair_number": 0,
             "input": "problem_1/error/input",
             "output": "problem_1/error/expect"

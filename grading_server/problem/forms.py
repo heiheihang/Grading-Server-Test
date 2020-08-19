@@ -14,7 +14,7 @@ class ProblemModelForm(ModelForm):
 
 class TestSuiteModelForm(forms.Form):
     suite_number = forms.IntegerField()
-    test_suite_description = forms.CharField(max_length = 500)
+    description = forms.CharField(max_length = 500)
 
 class TestPairModelForm(forms.Form):
     input_file = forms.FileField()

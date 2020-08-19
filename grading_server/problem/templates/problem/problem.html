@@ -33,19 +33,19 @@
 <div class="example">
     <div>Tests:</div>
     {% for example in examples %}
-    {{ example.test_suite.test_suite_description }}
-    <div class="example" id="{{ example.test_suite.problem_suite_number }}-{{ example.pair_number }}">
+    {{ example.suite.description }}
+    <div class="example" id="{{ example.suite.suite_number }}-{{ example.pair_number }}">
         <div class="input">
             <div class="input-header">Input<button
-                    onclick="copy('{{ example.test_suite.problem_suite_number }}-{{ example.pair_number }}-input')">Copy</button>
+                    onclick="copy('{{ example.suite.suite_number }}-{{ example.pair_number }}-input')">Copy</button>
             </div>
-            <pre><code class="input-main" id="{{ example.test_suite.problem_suite_number }}-{{ example.pair_number }}-input">{{ example.input.read.decode }}</code></pre>
+            <pre><code class="input-main" id="{{ example.suite.suite_number }}-{{ example.pair_number }}-input">{{ example.input.read.decode }}</code></pre>
         </div>
         <div class="output">
             <div class="output-header">Output<button
-                    onclick="copy('{{ example.test_suite.problem_suite_number }}-{{ example.pair_number }}-output')">Copy</button>
+                    onclick="copy('{{ example.suite.suite_number }}-{{ example.pair_number }}-output')">Copy</button>
             </div>
-            <pre><code class="output-main" id="{{ example.test_suite.problem_suite_number }}-{{ example.pair_number }}-output">{{ example.output.read.decode }}</code></pre>
+            <pre><code class="output-main" id="{{ example.suite.suite_number }}-{{ example.pair_number }}-output">{{ example.output.read.decode }}</code></pre>
         </div>
     </div>
     {% endfor %}

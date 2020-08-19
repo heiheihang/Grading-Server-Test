@@ -30,19 +30,19 @@ class ProblemModel(models.Model):
 
 class ProblemTestSuiteModel(models.Model):
     problem = models.ForeignKey(ProblemModel, on_delete = models.CASCADE)
-    problem_suite_number = models.IntegerField(default = 0)
-    test_suite_description = models.TextField()
+    suite_number = models.IntegerField(default = 0)
+    description = models.TextField()
 
     def __str__(self):
-        return (self.problem.name + ' test suite ' + str(self.problem_suite_number))
+        return (self.problem.name + ' test suite ' + str(self.suite_number))
 
     def get_absolute_url(self):
-        return reverse('suite_detail', args=[str(self.problem.id), str(self.problem_suite_number)])
+        return reverse('suite_detail', args=[str(self.problem.id), str(self.suite_number)])
 
 
 def test_file_path(instance, filename):
-    problem_id = instance.test_suite.problem.pk
-    suite_id = instance.test_suite.pk
+    problem_id = instance.suite.problem.pk
+    suite_id = instance.suite.pk
     return 'problem_' + str(problem_id) + '/' + str(suite_id) + '/'
 
 
@@ -55,11 +55,11 @@ def test_expect_path(instance, filename):
 
 
 class ProblemTestPairModel(models.Model):
-    test_suite = models.ForeignKey(ProblemTestSuiteModel, on_delete=models.CASCADE)
+    suite = models.ForeignKey(ProblemTestSuiteModel, on_delete=models.CASCADE)
     pair_number = models.IntegerField(default=0)
     input = models.FileField(upload_to=test_input_path)
     output = models.FileField(upload_to=test_expect_path)
 
     def __str__(self):
-        return(self.test_suite.problem.name + ' test suite ' + str(self.test_suite.problem_suite_number)
+        return(self.suite.problem.name + ' test suite ' + str(self.suite.suite_number)
                + ' test pair ' + str(self.pair_number))
