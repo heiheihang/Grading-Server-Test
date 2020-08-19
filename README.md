@@ -3,6 +3,7 @@
 ## Install
 
 ```
+pip install django-bootstrap-form
 python3 -m pip install django-rq
 
 #on a different thread 
