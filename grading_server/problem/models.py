@@ -59,6 +59,7 @@ class ProblemTestPairModel(models.Model):
     pair_number = models.IntegerField(default=0)
     input = models.FileField(upload_to=test_input_path)
     output = models.FileField(upload_to=test_expect_path)
+    visible = models.BooleanField(default=False)
 
     def __str__(self):
         return(self.suite.problem.name + ' test suite ' + str(self.suite.suite_number)

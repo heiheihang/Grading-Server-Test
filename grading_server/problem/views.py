@@ -6,7 +6,7 @@ from django.forms import modelformset_factory
 
 
 from .models import ProblemModel, ProblemTestSuiteModel, ProblemTestPairModel
-from .forms import ProblemModelForm, TestSuiteModelForm, TestPairModelForm
+from .forms import ProblemModelForm, TestSuiteModelForm, TestPairModelForm, TestPairModelUpdateForm
 
 # Create your views here.
 
@@ -14,7 +14,7 @@ from .forms import ProblemModelForm, TestSuiteModelForm, TestPairModelForm
 def problem_view(request, problem_id):
     problem = get_object_or_404(ProblemModel, id=problem_id)
     example_suites = ProblemTestSuiteModel.objects.filter(problem=problem)
-    examples = ProblemTestPairModel.objects.filter(suite__in=[suite.pk for suite in example_suites])
+    examples = ProblemTestPairModel.objects.filter(suite__in=[suite.pk for suite in example_suites]).filter(visible=True)
     if request.method == 'POST':
         if(form.is_valid()):
             suite_number = len(example_suites)
@@ -119,22 +119,42 @@ def test_suite_detail_view(request, problem_id, suite_id):
     print(test_suite)
     test_pairs = ProblemTestPairModel.objects.filter(suite=test_suite.pk)
     if request.method == 'POST':
-        form = TestPairModelForm(request.POST, request.FILES)
-        if(form.is_valid()):
-            pair_number = len(pairs)
-            print(suite_id)
-            input_file = form.cleaned_data['input_file']
-            output_file = form.cleaned_data['output_file']
+        for test_pair in test_pairs:
+            test_pair_form = TestPairModelUpdateForm(request.POST, request.FILES, prefix=str(test_pair.pair_number))
+            # errr will this ever be invalid?
+            if test_pair_form.is_valid():
+                test_pair.visible = test_pair_form.cleaned_data['visible']
+                test_pair.save()
+                
+        new_test_pair_form = TestPairModelForm(request.POST, request.FILES, prefix='new')
+        if(new_test_pair_form.is_valid()):
+            # change assigning new pair number
+            # suppose we had pairs #1 #2 #3, we deleted #2 so we have #1 #3
+            # next pair should be #4
+            test_pair_numbers = [suite.pair_number for suite in test_pairs]
+            test_pair_numbers.sort()
+            if(len(test_pair_numbers) == 0):
+                pair_number = 1
+            else:
+                pair_number = test_pair_numbers[-1] + 1
+
+            input_file = new_test_pair_form.cleaned_data['input_file']
+            output_file = new_test_pair_form.cleaned_data['output_file']
             new_suite = ProblemTestPairModel(suite = test_suite, pair_number = pair_number, input = input_file, output = output_file)
             new_suite.save()
-            return HttpResponseRedirect('/problem/' + str(problem_id))
+            #return HttpResponseRedirect('/problem/' + str(problem_id))
+        else:
+            # if we don't have this, when user save (submit) the updating forms above,
+            # the new test form will show error saying "file required"
+            new_test_pair_form = TestPairModelForm(prefix='new')
+        # TODO: tell user changes have been made + saved?
     else:
-        form = TestPairModelForm()
+        new_test_pair_form = TestPairModelForm(prefix='new')
     context = {
         'test_suite' : test_suite,
         'problem' : problem,
         'test_pairs': test_pairs,
-        'form' : form
+        'new_test_pair_form' : new_test_pair_form
     }
     return render(request, 'problem/test_suite_detail.html', context)
 
@@ -173,6 +193,7 @@ def test_pair_create_view(request, problem_id, suite_id):
         form = TestPairModelForm(request.POST or None, request.FILES or None)
         if not form.is_valid():
             return redirect(test_suite_detail_view, problem_id, suite_id)
+        visible = form.cleaned_data['visible']
         input_file = form.cleaned_data['input_file']
         output_file = form.cleaned_data['output_file']
 
@@ -184,7 +205,7 @@ def test_pair_create_view(request, problem_id, suite_id):
         else:
             pair_number = test_pair_numbers[-1] + 1
 
-        new_test_pair = ProblemTestPairModel(suite=test_suite, pair_number=pair_number, input=input_file, output=output_file)
+        new_test_pair = ProblemTestPairModel(suite=test_suite, pair_number=pair_number, visible=visible, input=input_file, output=output_file)
         new_test_pair.save()
         return redirect(test_suite_detail_view, problem_id, suite_id)
     return HttpResponseNotAllowed(['POST'])

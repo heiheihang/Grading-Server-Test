@@ -17,5 +17,13 @@ class TestSuiteModelForm(forms.Form):
     description = forms.CharField(max_length = 500)
 
 class TestPairModelForm(forms.Form):
+    visible = forms.BooleanField(required=False)
     input_file = forms.FileField()
     output_file = forms.FileField()
+
+class TestPairModelUpdateForm(forms.Form):
+    """Even if we allow updating the test file later on
+    we will want to set the input/output FileField to have required=False
+    but the create new test pair form (TestPairModelForm) should still require the files
+    so I'm making a new form class"""
+    visible = forms.BooleanField(required=False)

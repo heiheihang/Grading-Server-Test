@@ -11,21 +11,30 @@
 </div>
 
 <div class="test_pairs">
+  <form action="" method="POST" enctype="multipart/form-data">
+  {% csrf_token %}
+
   {% for pair in test_pairs %}
   <div class="pair-{{ pair.pair_number }}">
-    <div class="pair-name">Test pair #{{ pair.pair_number }} <a href="{{ pair.pair_number}}/delete">Delete</a></div>
-    input:
-    <pre><code class="input-main" id="{{ pair.pair_number }}-input">{{ pair.input.read.decode }}</code></pre>
-    Output:
-    <pre><code class="output-main" id="{{ pair.pair_number }}-output">{{ pair.output.read.decode }}</code></pre>
+    <div class="pair-name">Test pair #{{ pair.pair_number }} <a href="{{ pair.pair_number }}/delete">Delete</a></div>
+    <label for="id_{{ pair.pair_number }}-visible">Visible:</label> <input type="checkbox" name="{{ pair.pair_number }}-visible" id="id_{{ pair.pair_number }}-visible" {% if pair.visible %}checked{% endif %}>
+    <div class="test_input">input:
+      <pre><code class="input-main" id="{{ pair.pair_number }}-input">{{ pair.input.read.decode }}</code></pre>
+    </div>
+    <div class="test_output">Output:
+      <pre><code class="output-main" id="{{ pair.pair_number }}-output">{{ pair.output.read.decode }}</code></pre>
+    </div>
   </div>
   {% endfor %}
+
+  <button type="submit" name="save_test_pairs" value="save">Save</button>
+  </form>
 </div>
 
 <div class="add-pair">
   <form action="new_test" method="POST" enctype="multipart/form-data">
     {% csrf_token %}
-    {{ form.as_p }}
+    {{ new_test_pair_form.as_p }}
     <input type="submit" value="New test">
   </form>
 </div>
