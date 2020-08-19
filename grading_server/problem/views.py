@@ -47,8 +47,8 @@ def problem_edit_view(request, problem_id):
         #form_set = ProblemTestModelModelFormSet(initial=tests, prefix='tests')
         test_suites = problem.problemtestsuitemodel_set.all()
         add_suite_form = TestSuiteModelForm()
-        
-        return render(request, 'problem/edit.html', {'problem': ProblemModelForm(instance=problem, prefix='main'), 
+
+        return render(request, 'problem/edit.html', {'problem': ProblemModelForm(instance=problem, prefix='main'),
             'suites': test_suites,
             'add_suite_form': add_suite_form})
     if request.method == 'POST':
@@ -147,7 +147,10 @@ def test_suite_create_view(request, problem_id):
     print(test_suites)
     test_suites_numbers = [suite.problem_suite_number for suite in test_suites]
     test_suites_numbers.sort()
-    new_suite_number = test_suites_numbers[-1] + 1
+    if(len(test_suites_numbers) == 0):
+        new_suite_number = 1
+    else:
+        new_suite_number = test_suites_numbers[-1] + 1
     new_suite = ProblemTestSuiteModel(problem=problem, problem_suite_number=new_suite_number, test_suite_description='')
     print(new_suite)
     new_suite.save()
@@ -176,7 +179,10 @@ def test_pair_create_view(request, problem_id, suite_id):
         test_pairs = ProblemTestPairModel.objects.filter(test_suite=test_suite)
         test_pair_numbers = [suite.pair_number for suite in test_pairs]
         test_pair_numbers.sort()
-        pair_number = test_pair_numbers[-1] + 1
+        if(len(test_pair_numbers) == 0):
+            pair_number = 1
+        else:
+            pair_number = test_pair_numbers[-1] + 1
 
         new_test_pair = ProblemTestPairModel(test_suite=test_suite, pair_number=pair_number, input=input_file, output=output_file)
         new_test_pair.save()

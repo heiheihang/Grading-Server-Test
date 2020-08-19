@@ -6,3 +6,6 @@ grading_server/db.sqlite3
 grading_server/home/migrations/0001_initial.py
 grading_server/problem/migrations/0006_delete_problemtestmodel.py
 grading_server/submission/migrations/0010_auto_20200819_0158.py
+grading_server/media/problem_2/2/input
+grading_server/media/problem_1/1/expect
+grading_server/media/problem_2/2/expect
