@@ -9,7 +9,7 @@
 {% endblock %}
 {% block content %}
 
-<div class="problem-statement"> {{problem}} </div>
+<h1> {{problem}} </h1>
 <div class="code-submission">
     <form id="submission-form" enctype="multipart/form-data" method="POST">
         {% csrf_token %}
@@ -21,12 +21,47 @@
 
 </div>
 <div class="previous_submissions">
-  {% for sub in previous_submissions %}
-    {% if sub.feedback %}
-      <p>{{sub.submission_time}} </p>
-      <p>{{sub.feedback|linebreaks}} </p>
-      <p> ----------------------------- </p>
-    {% endif  %}
-  {% endfor %}
+  <div class = "row">
+
+
+
+      {% for sub in previous_submissions %}
+        <div class="col-sm-3">
+        {% if sub.feedback %}
+          {% if sub.correct %}
+
+            <div class="card text-center">
+              <div class="card-header">
+                {{sub.submission_time}}
+              </div>
+              <div class="card-body">
+                <h5 class="card-title">CORRECT</h5>
+                <p class="card-text">{{sub.feedback|linebreaks}}</p>
+                <a href="#" class="btn btn-primary">View Code</a>
+              </div>
+              <div class="card-footer text-muted">
+                Contest Submission
+              </div>
+            </div>
+          {% else %}
+            <div class="card text-center">
+              <div class="card-header">
+                {{sub.submission_time}}
+              </div>
+              <div class="card-body">
+                <h5 class="card-title">WRONG</h5>
+                <p class="card-text">{{sub.feedback|linebreaks}}</p>
+                <a href="#" class="btn btn-primary">View Code</a>
+              </div>
+              <div class="card-footer text-muted">
+                Contest Submission
+              </div>
+            </div>
+          {% endif %}
+        {% endif  %}
+        </div>
+      {% endfor %}
+
+  </div>
 </div>
 {% endblock %}

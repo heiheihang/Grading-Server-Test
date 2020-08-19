@@ -23,7 +23,7 @@ class FileSubmission(models.Model):
     report = models.FileField(upload_to='random/', blank = True, null = True)
     feedback = models.TextField(max_length=1000, null = True, blank= True)
     problem = models.ForeignKey(ProblemModel, on_delete=models.CASCADE, default = None, blank = True, null= True)
-
+    correct = models.BooleanField(default = False)
 
 class SubmissionReply(models.Model):
     submission = models.ForeignKey(FileSubmission, on_delete=models.CASCADE)
