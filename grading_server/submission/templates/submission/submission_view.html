@@ -14,17 +14,17 @@
 
     <form id="submission-form" enctype="multipart/form-data" method="POST">
       {% csrf_token %}
-      <div class="file-field">
-        <div class="btn btn-primary btn-sm float-left">
-          <span>Choose file</span>
-          {{form.file}}
+      <div class="form-group">
+        <div class="file-field">
+          <div class="btn btn-primary btn-sm float-left">
+            {{form.file}}
+          </div>
         </div>
-      </div>
 
-        <div class="form-group">
-
-          <label for="inputState">Language</label>
+        <div>
+          <label for="{{form.lang.id_for_label}}">Language</label>
           {{form.lang}}
+        </div>
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
