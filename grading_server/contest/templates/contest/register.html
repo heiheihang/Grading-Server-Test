@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load static %}
+<link rel="stylesheet" type="text/css" href="./ style.css">
+{% block content %}
+
+
+<div class="contest-header">
+    <h1>{{ contest.name }}</h1>
+</div>
+<div class='authors'>
+    Authors: {{ contest.author_string }}
+</div>
+
+
+<div>
+    <form action="" method="post">
+        {% csrf_token %}
+        <button name="register-button" value="Register">Register</button>
+    </form>
+</div>
+{% endblock %}

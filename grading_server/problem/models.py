@@ -1,14 +1,18 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.urls import reverse
-# Create your models here.
+from contest.models import ContestModel
+from visibility.models import VisibilityModel
 
+from datetime import datetime
 
 class ProblemModel(models.Model):
     name = models.CharField(max_length=100)
     authors = models.ManyToManyField(get_user_model())
     creation_time = models.DateTimeField(auto_now_add=True)
     problem_statement = models.TextField()
+    visibility = models.OneToOneField(VisibilityModel, on_delete=models.CASCADE)
+    contests = models.ManyToManyField(ContestModel)
 
     def __str__(self):
         return self.name
@@ -35,6 +39,17 @@ class ProblemModel(models.Model):
         suite_numbers = [suite.suite_number for suite in existing_suites]
         suite_numbers.sort()
         return suite_numbers[-1] + 1
+
+    def is_visible(self, user):
+        if self.authors.filter(pk=user.pk).exists():
+            return True
+        if self.visibility.is_visible(user):
+            return True
+        # if user is part of an active or past contest that uses this problem
+        contests = [c for c in self.contests.all() if c.contestants.filter(pk=user.pk).exists()]
+        time_now = datetime.now().astimezone()
+        contests = [c for c in contests if time_now >= c.start_time]
+        return len(contests) > 0
 
 class ProblemTestSuiteModel(models.Model):
     problem = models.ForeignKey(ProblemModel, on_delete = models.CASCADE)

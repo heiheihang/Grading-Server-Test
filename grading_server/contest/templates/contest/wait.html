@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load static %}
+<link rel="stylesheet" type="text/css" href="./ style.css">
+{% block content %}
+
+
+<div class="contest-header">
+    <h1>{{ contest.name }}</h1>
+</div>
+<div class='authors'>
+    Authors: {{ contest.author_string }}
+</div>
+
+<!--TODO: js dynamic count down clock?-->
+<div>
+    The contest has not started yet.
+    contest starts at {{ start_time }}, and it's currently {{ now }}
+</div>
+{% endblock %}

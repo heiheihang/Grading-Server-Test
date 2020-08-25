@@ -1,12 +1,13 @@
 from django.shortcuts import Http404, redirect, get_object_or_404, render
 
 # Create your views here.
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponseForbidden
 from .models import FileSubmission
 from .forms import FileSubmissionForm
 from django.contrib.auth.decorators import login_required
 from django.core.files.storage import FileSystemStorage
 from problem.models import ProblemModel
+from contest.models import ContestModel
 import datetime
 
 from .process_job import process_job
@@ -19,6 +20,8 @@ import django_rq
 def submission_view(request, problem_id):
     problem = get_object_or_404(ProblemModel, id=problem_id)
     user = request.user
+    if not problem.is_visible(user):
+        return HttpResponseForbidden()
     #print(request.user)
     if request.method == 'POST':
         form = FileSubmissionForm(request.POST, request.FILES)
@@ -39,12 +42,23 @@ def submission_view(request, problem_id):
 
             graded = False
 
+            contests = [c for c in problem.contests.all() if c.contestants.filter(pk=request.user.pk)]
+            contests = [c for c in contests if c.is_active()]
+            if len(contests) == 0:
+                contest = None
+            elif len(contests) == 1:
+                contest = contests[0]
+            else:
+                # errrr...?
+                contest = contests[0]
+
             current_submission = FileSubmission(
                 file = file,
                 submission_time = submission_time,
                 user = user,
                 graded = graded,
-                problem = problem
+                problem = problem,
+                contest = contest
             )
             #print(current_submission)
             current_submission.save()
@@ -70,6 +84,7 @@ def submission_view(request, problem_id):
 
 def problem_submission_index(request):
     problems = ProblemModel.objects.all()
+    problems = [p for p in problems if p.is_visible(request.user)]
     if(len(problems) > 100):
         problems = problems[:100]
     context = {

@@ -13,6 +13,8 @@ from .forms import ProblemModelForm, TestSuiteModelForm, TestPairModelForm, Test
 
 def problem_view(request, problem_id):
     problem = get_object_or_404(ProblemModel, id=problem_id)
+    if not problem.is_visible(request.user):
+        return HttpResponseForbidden()
     example_suites = ProblemTestSuiteModel.objects.filter(problem=problem)
     examples = ProblemTestPairModel.objects.filter(suite__in=[suite.pk for suite in example_suites]).filter(visible=True)
     if request.method == 'POST':
@@ -60,8 +62,9 @@ def problem_edit_view(request, problem_id):
 def problem_index_view(request):
     if request.method == 'GET':
         problems = ProblemModel.objects.all()
+        problems = [p for p in problems if p.is_visible(request.user)]
         if(len(problems) > 10):
-            problems = ProblemModel.objects.all()[:10].get()
+            problems = problems[:10]
         return render(request, 'problem/index.html', {'problems': problems})
     return HttpResponseNotAllowed(['GET'])
 

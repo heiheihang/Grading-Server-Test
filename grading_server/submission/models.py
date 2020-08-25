@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 # Create your models here.
 from problem.models import ProblemModel
 from submission.choices import *
+from contest.models import ContestModel
 
 def file_submission_name(instance, filename):
     # TODO: use my_lib?
@@ -24,6 +25,12 @@ class FileSubmission(models.Model):
     feedback = models.TextField(max_length=1000, null = True, blank= True)
     problem = models.ForeignKey(ProblemModel, on_delete=models.CASCADE, default = None, blank = True, null= True)
     correct = models.BooleanField(default = False)
+    # users can submit to problem after contest ends (for practice)
+    # so submission need to check whether it's part of a contest
+    # Plus it's easier to find all submissions for a contest this way
+    contest = models.ForeignKey(
+        ContestModel, on_delete=models.CASCADE, default=None, blank=True, null=True)
+
 
 class SubmissionReply(models.Model):
     submission = models.ForeignKey(FileSubmission, on_delete=models.CASCADE)

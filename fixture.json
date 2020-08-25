@@ -42,8 +42,12 @@
             "name": "Test Problem",
             "creation_time": "2020-08-07T11:05:32.020Z",
             "problem_statement": "This is a test problem.",
+            "visibility": 1,
             "authors": [
                 2
+            ],
+            "contests": [
+                1
             ]
         }
     },
@@ -130,6 +134,38 @@
             "date_joined": "2020-08-12T04:52:50.208Z",
             "groups": [],
             "user_permissions": []
+        }
+    },
+    {
+        "model": "visibility.visibilitymodel",
+        "pk": 1,
+        "fields": {
+            "mode": "PRIV",
+            "release_time": "2047-01-01T00:00:00.000+08",
+            "whitelist": []
+        }
+    },
+    {
+        "model": "visibility.visibilitymodel",
+        "pk": 2,
+        "fields": {
+            "mode": "PUB",
+            "release_time": "2047-01-01T00:00:00.000+08",
+            "whitelist": []
+        }
+    },
+    {
+        "model": "contest.contestmodel",
+        "pk": 1,
+        "fields": {
+            "name": "Test Contest",
+            "authors": [
+                1,
+                2
+            ],
+            "visibility": 2,
+            "start_time": "2047-01-01T00:00:00.000+08",
+            "end_time": "2047-01-02T00:00:00.000+08"
         }
     }
 ]

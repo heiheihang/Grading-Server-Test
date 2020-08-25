@@ -1,0 +1,49 @@
+<!--
+    I want to show fields based on selected mode
+    e.g. show user-whitelist-selection in private mode,
+        but not when public mode is selected
+    so I'm hand-rolling my own form and use jquery
+    big downside: the form is decoupled from the mdoel
+    we have to update the form and all functions using this form
+    when the model is changed
+    but currently we can just do:
+    visibility_form = VisibilityForm(request.POST, instance=vis_intsance, prefix='vis')
+    TODO: currently we can't have multiple instances of this form in a page
+-->
+<p><label for="id_vis-mode">Visibility:</label> <select name="vis-mode" id="id_vis-mode">
+        <option value="PUB" {% if visibility.mode == 'PUB' %}selected{% endif %}>Public</option>
+        <option value="TIME" {% if visibility.mode == 'TIME' %}selected{% endif %}>Timed Release</option>
+        <option value="PRIV" {% if visibility.mode == 'PRIV' %}selected{% endif %}>Private List</option>
+    </select></p>
+<div id="id_vis-release_time_div"><label for="id_vis-release_time">Release time:</label> <input type="text"
+        name="vis-release_time" value="{{visibility.release_time.isoformat}}" required id="id_vis-release_time"><input
+        type="hidden" name="initial-vis-release_time" value="{{visibility.release_time.isoformat}}"
+        id="initial-vis-id_vis-release_time"></div>
+<!--TODO: how on earth should this whitelist thing work-->
+<div id="id_vis-whitelist_div"><label for="id_vis-whitelist">Whitelist:</label> <select name="vis-whitelist"
+        id="id_vis-whitelist" multiple>
+        <option value="1" {% if 1 in whitelist %}selected{% endif %}>heiheihang</option>
+        <option value="2" {% if 2 in whitelist %}selected{% endif %}>geoffrey</option>
+        <option value="3" {% if 3 in whitelist %}selected{% endif %}>test_user</option>
+    </select></div>
+<script>
+    function change_visibility_form() {
+        selection = $('#id_vis-mode').val();
+        switch (selection) {
+            case 'TIME':
+                $('#id_vis-release_time_div').show();
+                $('#id_vis-whitelist_div').hide();
+                break;
+            case 'PRIV':
+                $('#id_vis-release_time_div').hide();
+                $('#id_vis-whitelist_div').show();
+                break;
+            case 'PUB':
+                $('#id_vis-release_time_div').hide();
+                $('#id_vis-whitelist_div').hide();
+                break;
+        }
+    }
+    $('#id_vis-mode').on('change', change_visibility_form);
+    change_visibility_form();
+</script>
