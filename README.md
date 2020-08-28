@@ -10,7 +10,7 @@ python manage.py runserver
 redis-server
 
 # on a different thread (console)
-py manage.py rqworker default
+python manage.py rqworker default
 ```
 
 ## Install
@@ -18,7 +18,7 @@ py manage.py rqworker default
 ```
 pip install django
 pip install django-bootstrap-form
-python3 -m pip install django-rq
+python -m pip install django-rq
 ```
 
 ## Testing 
@@ -31,13 +31,13 @@ rm db.sqlite3
 rm -r media/*
 
 # make migrations
-python3 manage.py makemigrations
-python3 manage.py migrate
+python manage.py makemigrations
+python manage.py migrate
 
 # load data
 unzip ../data.zip
-python3 manage.py loaddata ../fixture.json
+python manage.py loaddata ../fixture.json
 
 # and we should be good
-python3 manage.py runserver
+python manage.py runserver
 ```
