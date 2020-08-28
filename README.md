@@ -1,15 +1,19 @@
 # Grading-Server-Test
 
-## Install
-
+##Run
 ```
-pip install django-bootstrap-form
-python3 -m pip install django-rq
-
 #on a different thread 
 redis-server
 # on a different thread (console)
 py manage.py rqworker default
+```
+
+## Install
+
+```
+pip install django
+pip install django-bootstrap-form
+python3 -m pip install django-rq
 ```
 
 ## Testing 
