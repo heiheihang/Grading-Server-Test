@@ -78,7 +78,7 @@ def contest_edit_view(request, contest_id):
         return HttpResponseForbidden()
     if request.method == 'GET':
         contest_form = ContestForm(instance=contest, prefix='main')
-        # we need the whitelist thing, because we can't 
+        # we need the whitelist thing, because we can't
         # call function with arguemnt (ie use .filter(pk=#).exists()) in templates
         return render(request, 'contest/edit.html', {'contest_form': contest_form, 'visibility': contest.visibility, 'whitelist': [u.pk for u in contest.visibility.whitelist.all()]})
     elif request.method == 'POST':

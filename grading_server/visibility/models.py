@@ -38,3 +38,6 @@ class VisibilityModel(models.Model):
             # in case idk
             raise NotImplementedError
         return self.whitelist.filter(pk=user.pk).exists()
+
+    def __str__(self):
+        return str(self.mode)
