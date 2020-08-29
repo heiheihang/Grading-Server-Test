@@ -5,12 +5,16 @@
 python manage.py makemigrations
 python manage.py migrate
 python manage.py runserver
+```
 
 **For Windows**
+```
 py manage.py makemigrations
 py manage.py migrate
 py manage.py runserver
+```
 
+```
 #on a different thread 
 redis-server
 
