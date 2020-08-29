@@ -5,6 +5,12 @@
 python manage.py makemigrations
 python manage.py migrate
 python manage.py runserver
+
+#on a different thread 
+redis-server
+
+# on a different thread (console)
+python manage.py rqworker default
 ```
 
 **For Windows**
@@ -12,14 +18,6 @@ python manage.py runserver
 py manage.py makemigrations
 py manage.py migrate
 py manage.py runserver
-```
-
-```
-#on a different thread 
-redis-server
-
-# on a different thread (console)
-python manage.py rqworker default
 ```
 
 ## Install
