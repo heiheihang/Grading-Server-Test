@@ -1,6 +1,6 @@
 # Grading-Server-Test
 
-##Run
+## Run
 ```
 python manage.py makemigrations
 python manage.py migrate
