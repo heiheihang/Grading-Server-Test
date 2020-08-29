@@ -3,10 +3,4 @@ tmp
 .cph
 .vscode
 grading_server/db.sqlite3
-grading_server/home/migrations/0001_initial.py
-grading_server/problem/migrations/0006_delete_problemtestmodel.py
-grading_server/submission/migrations/0010_auto_20200819_0158.py
 grading_server/media/*
-grading_server/submission/migrations/0013_merge_20200826_0248.py
-grading_server/submission/migrations/0012_merge_20200819_0606.py
-grading_server/submission/migrations/0011_filesubmission_correct.py
