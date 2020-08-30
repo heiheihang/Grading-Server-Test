@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+
+{{contest.id}}
+
+<script>
+  var cnt = 0;
+</script>
+
+<form class="contest-form" method='POST'>
+{% csrf_token %}
+{% for problem in problems %}
+<div class="form-check">
+
+ <input class="form-check-input" type="checkbox" value="" id="defaultCheck">
+  <label class="form-check-label" for="defaultCheck">
+    {{problem.name}}
+  </label>
+</div>
+<script>
+  cell = document.getElementById("defaultCheck");
+  cell.value = cnt;
+  cell.name = cnt;
+  cell.id = cnt
+  cnt += 1;
+  console.log(cell.id)
+</script>
+{% endfor %}
+<button type="submit">Save</button>
+</form>
+{% endblock %}

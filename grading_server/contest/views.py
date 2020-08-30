@@ -105,3 +105,23 @@ def contest_register_view(request, contest_id):
         contest.contestants.add(request.user)
         return redirect(contest_detail_view, contest_id)
     return HttpResponseNotAllowed(['GET', 'POST'])
+
+
+@login_required
+def contest_add_problem_view(request, contest_id):
+    contest = get_object_or_404(ContestModel, id=contest_id)
+    problems = ProblemModel.objects.all().order_by('-creation_time')
+    if(len(problems) >= 50):
+        problems = problems[:50]
+    if(request.method == 'POST'):
+        print(request.POST)
+        for i in range(50):
+            if str(i) in request.POST:
+                print(i)
+                problems[i].contests.add(contest)
+    context = {
+        'contest' : contest,
+        'problems' : problems,
+    }
+
+    return render(request, 'contest/add_problem.html', context)
