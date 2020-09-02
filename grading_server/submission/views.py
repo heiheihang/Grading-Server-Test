@@ -27,16 +27,7 @@ def submission_view(request, problem_id):
         form = FileSubmissionForm(request.POST, request.FILES)
         if form.is_valid():
 
-            #input file handling---------------------------------------------------
             file = form.cleaned_data['file']
-            # fs = FileSystemStorage()
-            # time = my_lib.roundSeconds(datetime.datetime.now())
-            # t = str(time.year) + '-' + str(time.month) + '-' + str(time.day) + '-' + str(time.hour) + '-' + str(time.minute) + '-' + str(time.second)
-            # user_id = request.user.id
-            # s = str(user_id) + '/' + str(problem_id) + "_" + str(t) + "_" + str(user_id)+".py"
-            # filename = fs.save(s,file)    #file name is "problemID_Time_UserID.py"
-            # print(s)
-            #FileSubssmion fields information---------------------------------------
             lang = form.cleaned_data['lang']
             submission_time = my_lib.roundSeconds(datetime.datetime.now())
 
@@ -60,7 +51,11 @@ def submission_view(request, problem_id):
                 problem = problem,
                 contest = contest
             )
+
             #print(current_submission)
+            current_submission.save()
+            current_submission.during_contest()
+            current_submission.check_contest()
             current_submission.save()
             django_rq.enqueue(process_job, current_submission.pk)
             #process_job(current_submission.pk)
@@ -70,8 +65,8 @@ def submission_view(request, problem_id):
         form = FileSubmissionForm()
 
     previous_submissions = FileSubmission.objects.all().filter(user = user, problem = problem).order_by('-submission_time')
-    if(len(previous_submissions) > 10):
-        previous_submissions = previous_submissions[:10]
+    if(len(previous_submissions) > 3):
+        previous_submissions = previous_submissions[:4]
     for x in previous_submissions:
         my_lib.parse_report(x)
     context = {

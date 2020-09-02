@@ -13,6 +13,12 @@ def file_submission_name(instance, filename):
     submission_id = instance.pk
     return 'user_{0}/{1}_{0}_{2}/submission'.format(user_id, problem_id, time)
 
+SUB_CHOICES = [
+    ("1", "contest"),
+    ("2", "practice"),
+    ("3", "class"),
+]
+
 class FileSubmission(models.Model):
     #LANGUAGES = [('PY', 'Python 3.7')]
 
@@ -30,7 +36,18 @@ class FileSubmission(models.Model):
     # Plus it's easier to find all submissions for a contest this way
     contest = models.ForeignKey(
         ContestModel, on_delete=models.CASCADE, default=None, blank=True, null=True)
+    type = models.CharField(max_length = 10, choices = SUB_CHOICES, default = None, blank = True, null = True)
 
+    def during_contest(self):
+        if(self.contest != None):
+            if(self.submission_time > self.contest.start_time and self.submission_time < self.contest.end_time):
+                self.type = 1
+            else:
+                self.type = 2
+
+    def check_contest(self):
+        if(self.problem.contest != None):
+            self.contest = self.problem.contest
 
 class SubmissionReply(models.Model):
     submission = models.ForeignKey(FileSubmission, on_delete=models.CASCADE)

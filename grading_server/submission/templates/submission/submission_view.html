@@ -63,7 +63,9 @@
                 <a href="#" class="btn btn-primary">View Code</a>
               </div>
               <div class="card-footer text-muted">
-                Contest Submission
+                {%if sub.type%}
+                {{sub.type}}
+                {% endif %}
               </div>
             </div>
           {% endif %}
