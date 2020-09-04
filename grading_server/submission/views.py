@@ -1,7 +1,7 @@
 from django.shortcuts import Http404, redirect, get_object_or_404, render
 
 # Create your views here.
-from django.http import HttpResponseRedirect, HttpResponseForbidden
+from django.http import HttpResponseRedirect, HttpResponseForbidden, HttpResponseNotAllowed
 from .models import FileSubmission
 from .forms import FileSubmissionForm
 from django.contrib.auth.decorators import login_required
