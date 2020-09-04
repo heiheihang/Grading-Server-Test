@@ -15,24 +15,16 @@ def problem_view(request, problem_id):
     problem = get_object_or_404(ProblemModel, id=problem_id)
     if not problem.is_visible(request.user):
         return HttpResponseForbidden()
-    example_suites = ProblemTestSuiteModel.objects.filter(problem=problem)
-    examples = ProblemTestPairModel.objects.filter(suite__in=[suite.pk for suite in example_suites]).filter(visible=True)
-    if request.method == 'POST':
-        if(form.is_valid()):
-            suite_number = len(example_suites)
-            #print(suite_number)
-            suite_description = form.cleaned_data['description']
-            new_suite = ProblemTestSuiteModel(problem = problem, suite_number = suite_number, description = suite_description)
-            new_suite.save()
-            return HttpResponseRedirect(str(suite_number + 1))
+        example_suites = ProblemTestSuiteModel.objects.filter(problem=problem)
+        examples = ProblemTestPairModel.objects.filter(suite__in=[suite.pk for suite in example_suites]).filter(visible=True)
 
-    context = {
-        'problem': problem,
-        'is_author': problem.authors.filter(pk=request.user.pk).exists(),
+        context = {
+            'problem': problem,
+            'is_author': problem.authors.filter(pk=request.user.pk).exists(),
         #'form': form,
-        'examples': examples,
+            'examples': examples,
         }
-    return render(request, 'problem/problem.html', context)
+        return render(request, 'problem/problem.html', context)
     #return HttpResponseNotAllowed(['GET', 'POST'])
 
 
