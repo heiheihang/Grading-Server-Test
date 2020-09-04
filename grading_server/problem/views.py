@@ -121,7 +121,7 @@ def test_suite_detail_view(request, problem_id, suite_id):
             # the new test form will show error saying "file required"
             new_test_pair_form = TestPairModelForm(prefix='new')
         # TODO: tell user changes have been made + saved?
-    elif request.method == 'POST':
+    elif request.method == 'GET':
         new_test_pair_form = TestPairModelForm(prefix='new')
         context = {
             'test_suite' : test_suite,
