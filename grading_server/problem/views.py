@@ -8,24 +8,24 @@ from django.forms import modelformset_factory
 from .models import ProblemModel, ProblemTestSuiteModel, ProblemTestPairModel
 from .forms import ProblemModelForm, TestSuiteModelForm, TestPairModelForm, TestPairModelUpdateForm
 
-# Create your views here.
-
 
 def problem_view(request, problem_id):
+    """serves the webpage of the problem,
+    contains some example (visible) tests that will run on submissions of the problem"""
     problem = get_object_or_404(ProblemModel, id=problem_id)
     if not problem.is_visible(request.user):
         return HttpResponseForbidden()
+    if request.method == 'GET':
         example_suites = ProblemTestSuiteModel.objects.filter(problem=problem)
         examples = ProblemTestPairModel.objects.filter(suite__in=[suite.pk for suite in example_suites]).filter(visible=True)
 
         context = {
             'problem': problem,
             'is_author': problem.authors.filter(pk=request.user.pk).exists(),
-        #'form': form,
             'examples': examples,
         }
         return render(request, 'problem/problem.html', context)
-    #return HttpResponseNotAllowed(['GET', 'POST'])
+    return HttpResponseNotAllowed(['GET'])
 
 
 @login_required
@@ -55,8 +55,14 @@ def problem_index_view(request):
     if request.method == 'GET':
         problems = ProblemModel.objects.all()
         problems = [p for p in problems if p.is_visible(request.user)]
-        if(len(problems) > 10):
-            problems = problems[:10]
+
+        if 'page' in request.GET:
+            page_num = request.GET['page']
+        else:
+            page_num = 0
+        # TODO: constant or configurable?
+        PROBLEMS_PER_PAGE = 10
+        problems = problems[page_num * PROBLEMS_PER_PAGE:(page_num+1) * PROBLEMS_PER_PAGE]
         return render(request, 'problem/index.html', {'problems': problems})
     return HttpResponseNotAllowed(['GET'])
 
@@ -81,10 +87,16 @@ def problem_create_view(request):
 
 @login_required
 def test_suite_detail_view(request, problem_id, suite_id):
+    """serves page for editing a test suite, and handles the request for the edits
+    NOTE: as I couldn't figure out how to do multiple forms per webpage, (the test pairs)
+        I'm semi-handrolling the forms, and using id as form prefixes
+        thus if you change stuff here you'll probably need to change the template, and vise versa
+        """
     test_suite = get_object_or_404(ProblemTestSuiteModel, suite_number=suite_id, problem__id=problem_id)
     problem = test_suite.problem
     if not problem.authors.filter(pk=request.user.pk).exists():
         return HttpResponseForbidden()
+    
     pairs = test_suite.problemtestpairmodel_set.all()
     print(test_suite)
     test_pairs = ProblemTestPairModel.objects.filter(suite=test_suite.pk)
@@ -109,15 +121,16 @@ def test_suite_detail_view(request, problem_id, suite_id):
             # the new test form will show error saying "file required"
             new_test_pair_form = TestPairModelForm(prefix='new')
         # TODO: tell user changes have been made + saved?
-    else:
+    elif request.method == 'POST':
         new_test_pair_form = TestPairModelForm(prefix='new')
-    context = {
-        'test_suite' : test_suite,
-        'problem' : problem,
-        'test_pairs': test_pairs,
-        'new_test_pair_form' : new_test_pair_form
-    }
-    return render(request, 'problem/test_suite_detail.html', context)
+        context = {
+            'test_suite' : test_suite,
+            'problem' : problem,
+            'test_pairs': test_pairs,
+            'new_test_pair_form' : new_test_pair_form
+        }
+        return render(request, 'problem/test_suite_detail.html', context)
+    return HttpResponseNotAllowed(['GET', 'POST'])
 
 @login_required
 def test_suite_create_view(request, problem_id):
