@@ -91,7 +91,7 @@ def submission_view(request, problem_id):
             'previous_submissions' : previous_submissions
         }
         return render(request, 'submission/submission_view.html', context)
-    return HttpResponseForbidden(['GET', 'POST'])
+    return HttpResponseNotAllowed(['GET', 'POST'])
 
 def problem_submission_index(request):
     """list of problems user can submit to,
