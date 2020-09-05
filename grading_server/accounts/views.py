@@ -3,8 +3,16 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseNotAllowed
 from django.shortcuts import redirect
 from django.contrib.auth.models import User
+from django.utils.encoding import force_text
+from django.utils.http import urlsafe_base64_decode
+from django.contrib import messages
+from django.template.loader import render_to_string
+from django.contrib.sites.shortcuts import get_current_site
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode
 
 from accounts.forms import LoginForm, RegisterForm
+from .token import account_activation_token
 
 from time import sleep
 
@@ -54,10 +62,37 @@ def custom_register(request):
     form = RegisterForm(request.POST or None)
     if request.method == 'POST':
         if form.is_valid():
-            User.objects.create_user(
-                request.POST['username'], email=request.POST['email'], password=request.POST['password'])
-            # TODO: actually make a verify email thing
-            return render(request, '/', {'message': 'You have been registered! Please verify the your email address.'})
+            user = User.objects.create_user(
+                form.cleaned_data['username'], email=form.cleaned_data['email'], password=form.cleaned_data['password'])
+            current_site = get_current_site(request)
+            email_content = render_to_string('accounts/confirm_email.html', {
+                'user': user,
+                'domain': current_site.domain,
+                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                'token': account_activation_token.make_token(user),
+            })
+            user.email_user('Activate Account', email_content)
+            messages.success(request, ('You have been registered! Please verify the your email address.'))
+            return redirect('/')
     return render(request, 'accounts/register.html', {'form': form})
+
+def verify_email_view(request, uidb64, token):
+    if request.method != 'GET':
+        return HttpResponseNotAllowed(['GET'])
+
+    try:
+        uid = force_text(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+
+    if not user is None and account_activation_token.check_token(user, token):
+        user.email_verify.email_confirmed = True
+        user.email_verify.save()
+        messages.success(request, ('Your email have been verified.'))
+    else:
+        # TODO: resend verify email option somewhere?
+        messages.warning('Invalid email verify link.')
+    return redirect('/')
 
 # TODO: password reset via email

@@ -131,6 +131,7 @@ STATICFILES_DIRS = [
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 MEDIA_URL = '/media/'
 
+# TODO: change this to (???) to actually send email instead of printing to console
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 RQ_QUEUES = {
