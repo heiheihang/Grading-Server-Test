@@ -11,6 +11,7 @@ from .forms import ContestForm, ContestCreateForm
 from visibility.models import VisibilityModel
 from visibility.forms import VisibilityForm
 
+#Past Contests Views
 
 def contest_index_view(request):
     if request.method == 'GET':
@@ -77,6 +78,9 @@ def contest_detail_view(request, contest_id):
     # the remaining cases are:
     #   registered, contest is active (start < now < end)
     #   contest has finished
+    if registered and current_time >= contest.end_time:
+        return render(request, 'contest/end.html',
+                        {'contest': contest})
     # we can serve the contest page either way
     # TODO: or do we? maybe we don't want unregistered user to see access contest after contest ended?
     return render(request, 'contest/contest.html', {'problems': problems, 'problems': problems})
@@ -140,3 +144,10 @@ def contest_add_problem_view(request, contest_id):
         'problems' : problems,
     }
     return render(request, 'contest/add_problem.html', context)
+
+def contest_end_view(request, contest_id):
+    contest = get_object_or_404(ContestModel, id=contest_id)
+    context = {
+        'contest' : contest
+    }
+    return render(request, 'contest/end.html')

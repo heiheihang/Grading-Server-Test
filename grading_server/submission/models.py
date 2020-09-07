@@ -38,7 +38,7 @@ class FileSubmission(models.Model):
 
     # report file that's generated after testing automatically
     report = models.FileField(upload_to='random/', blank = True, null = True)
-    
+
     # manual feedback
     graded = models.BooleanField(default=False)
     correct = models.BooleanField(default = False)

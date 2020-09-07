@@ -9,4 +9,5 @@ urlpatterns = [
     path('<int:contest_id>/edit/', views.contest_edit_view, name='contest_edit'),
     path('<int:contest_id>/register/', views.contest_register_view, name='contest_register'),
     path('<int:contest_id>/edit/add_problem/', views.contest_add_problem_view, name='add_problem'),
+    path('<int:contest_id>/end/', views.contest_end_view, name='end_problem')
 ]
