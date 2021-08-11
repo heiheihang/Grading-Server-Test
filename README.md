@@ -1,5 +1,7 @@
 # Grading-Server-Test
 
+A codeforces clone
+
 ## Run
 ```
 python manage.py makemigrations
